@@ -1,0 +1,6 @@
+@IndekserPrzypraw_HostAddress = http://localhost:5111
+
+GET {{IndekserPrzypraw_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
