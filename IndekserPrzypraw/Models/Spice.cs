@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using IndekserPrzypraw.Models;
 
-namespace IndekserPrzypraw.Domain;
+namespace IndekserPrzypraw.Models;
 
 public class Spice
 {
@@ -17,6 +16,8 @@ public class Spice
 
   public override string ToString()
   {
-    return $"{nameof(SpiceId)}: {SpiceId}, {nameof(SpiceGroupId)}: {SpiceGroupId}, {nameof(DrawerId)}: {DrawerId}, {nameof(ExpirationDate)}: {ExpirationDate}, {nameof(Grams)}: {Grams}";
+    return $"{nameof(SpiceId)}: {SpiceId}, {nameof(SpiceGroupId)}: {SpiceGroupId}, " +
+           $"{nameof(DrawerId)}: {DrawerId}, {nameof(ExpirationDate)}: {ExpirationDate}, " +
+           $"{nameof(Grams)}: {Grams}";
   }
 }

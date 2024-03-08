@@ -1,5 +1,4 @@
 using System.Collections;
-using IndekserPrzypraw.Domain;
 using IndekserPrzypraw.DTO;
 using IndekserPrzypraw.Models;
 using IndekserPrzypraw.Profiles;
@@ -9,10 +8,15 @@ namespace IndekserPrzypraw.Repositories;
 
 public interface ISpiceRepository
 {
-  Task<Spice> AddSpice(Spice spice);
-  Task<IEnumerable<Spice>> GetAllSpices();
+  Task<Spice> AddSpiceAsync(Spice spice);
+  Task<IEnumerable<Spice>> GetAllSpicesAsync();
   Task<IEnumerable<Spice>> GetAllSpicesFromDrawerAsync(int drawerId);
+  Task<Spice?> GetSpiceByIdAsync(int id);
   Task<IEnumerable<IGrouping<string,Spice>>> GetSpiceGroupsFromDrawerAsync(int drawerId);
+
+  Task DeleteSpiceAsync(Spice spice);
+
+  Task TransferSpicesAsync(int fromDrawerId, int toDrawerId);
 }
 
 public class SpiceRepository : ISpiceRepository
@@ -27,14 +31,14 @@ public class SpiceRepository : ISpiceRepository
     _context = unitOfWork.Context;
   }
 
-  public async Task<Spice> AddSpice(Spice spice)
+  public async Task<Spice> AddSpiceAsync(Spice spice)
   {
     _context.Spices.Add(spice);
     await _context.SaveChangesAsync();
     return spice;
   }
 
-  public async Task<IEnumerable<Spice>> GetAllSpices()
+  public async Task<IEnumerable<Spice>> GetAllSpicesAsync()
   {
     IEnumerable<Spice> spices = await _context.Spices
       .AsNoTracking()
@@ -53,6 +57,11 @@ public class SpiceRepository : ISpiceRepository
     return spices;
   }
 
+  public async Task<Spice?> GetSpiceByIdAsync(int id)
+  {
+    return await _context.Spices.AsNoTracking().FirstOrDefaultAsync(spice => spice.SpiceId == id);
+  }
+
   public async Task<IEnumerable<IGrouping<string,Spice>>> GetSpiceGroupsFromDrawerAsync(int drawerId)
   {
     ICollection<IGrouping<string,Spice>> spiceGroups;
@@ -65,5 +74,22 @@ public class SpiceRepository : ISpiceRepository
         .ToListAsync();
     }
     return spiceGroups;
+  }
+
+  public async Task DeleteSpiceAsync(Spice spice)
+  {
+    _context.Remove(spice);
+    await _context.SaveChangesAsync();
+  }
+
+  public async Task TransferSpicesAsync(int fromDrawerId, int toDrawerId)
+  {
+    var asyncSpices = _context.Spices.Where(spice => spice.DrawerId == fromDrawerId).AsAsyncEnumerable();
+    await foreach (var spice in asyncSpices)
+    {
+      spice.DrawerId = toDrawerId;
+    }
+
+    await _context.SaveChangesAsync();
   }
 }

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace IndekserPrzypraw.Domain;
+namespace IndekserPrzypraw.Models;
 
 public class SpiceGroup
 {

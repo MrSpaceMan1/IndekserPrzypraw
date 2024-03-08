@@ -1,5 +1,4 @@
 using AutoMapper;
-using IndekserPrzypraw.Domain;
 using IndekserPrzypraw.DTO;
 using IndekserPrzypraw.Models;
 

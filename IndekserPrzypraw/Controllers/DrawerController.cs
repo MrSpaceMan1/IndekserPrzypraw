@@ -1,6 +1,5 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using IndekserPrzypraw.Domain;
 using IndekserPrzypraw.DTO;
 using IndekserPrzypraw.Exceptions;
 using IndekserPrzypraw.Models;
@@ -8,6 +7,7 @@ using IndekserPrzypraw.Profiles;
 using IndekserPrzypraw.Repositories;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace IndekserPrzypraw.Controllers
 {
@@ -17,6 +17,7 @@ namespace IndekserPrzypraw.Controllers
     {
         private readonly UnitOfWork<SpicesContext> _unitOfWork;
         private readonly DrawerRepository _drawerRepository;
+        private readonly SpiceRepository _spiceRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<DrawerController> _logger;
 
@@ -25,6 +26,7 @@ namespace IndekserPrzypraw.Controllers
             _mapper = mapper;
             _unitOfWork = new UnitOfWork<SpicesContext>(context);
             _drawerRepository = new DrawerRepository(_unitOfWork);
+            _spiceRepository = new SpiceRepository(_unitOfWork);
             _logger = logger;
         }
 
@@ -105,6 +107,15 @@ namespace IndekserPrzypraw.Controllers
             Drawer? drawer = await _drawerRepository.GetDrawerByIdAsync(id);
             if (drawer is null) return NotFound($"Drawer with id {id} not found");
 
+            if (!drawer.Spices.IsNullOrEmpty())
+                return this.BadRequestDueTo(new NotEmptyException(x =>
+                    x.AddModelError(
+                        nameof(drawer.Spices), 
+                        $"Drawer with id {id} is not empty"
+                    )
+                ));
+            
+            
             await _unitOfWork.BeginTransaction();
             try
             {
@@ -113,6 +124,32 @@ namespace IndekserPrzypraw.Controllers
                 return NoContent();
             }
             catch (Exception)
+            {
+                await _unitOfWork.Rollback();
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("{from}/{to}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> MoveDrawer(int from, int to)
+        {
+            Drawer? fromDrawer = await _drawerRepository.GetDrawerByIdAsync(from);
+            if (fromDrawer is null) return NotFound($"Drawer with id {from} not found");
+            
+            Drawer? toDrawer = await _drawerRepository.GetDrawerByIdAsync(to);
+            if (toDrawer is null) return NotFound($"Drawer with id {to} not found");
+
+            await _unitOfWork.BeginTransaction();
+            try
+            {
+                await _spiceRepository.TransferSpicesAsync(from, to);
+                await _unitOfWork.Commit();
+                return NoContent();
+            }
+            catch
             {
                 await _unitOfWork.Rollback();
                 return BadRequest();

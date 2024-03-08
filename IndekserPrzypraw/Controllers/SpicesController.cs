@@ -1,7 +1,5 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using IndekserPrzypraw.Domain;
 using IndekserPrzypraw.DTO;
 using IndekserPrzypraw.Models;
 using IndekserPrzypraw.Profiles;
@@ -13,7 +11,6 @@ namespace IndekserPrzypraw.Controllers
     [ApiController] 
     public class SpicesController : ControllerBase
     {
-        private readonly SpicesContext _context;
         private readonly SpiceRepository _spiceRepository;
         private readonly SpiceGroupRepository _spiceGroupRepository;
         private readonly DrawerRepository _drawerRepository;
@@ -23,7 +20,6 @@ namespace IndekserPrzypraw.Controllers
 
         public SpicesController(SpicesContext context, ILogger<SpicesController> logger, IMapper mapper)
         {
-            _context = context;
             _unitOfWork = new UnitOfWork<SpicesContext>(context);
             _spiceRepository = new SpiceRepository(_unitOfWork);
             _spiceGroupRepository = new SpiceGroupRepository(_unitOfWork);
@@ -36,61 +32,22 @@ namespace IndekserPrzypraw.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SpiceDTO>>> GetSpices()
         {
-            IEnumerable<Spice> spices = await _spiceRepository.GetAllSpices();
-            var spiceDTOs = _mapper.Map<IEnumerable<Spice>, List<SpiceDTO>>(spices);
-            _logger.LogInformation("List of all spices: [{0}]", string.Join(", ", spiceDTOs));
-            return Ok(spiceDTOs);
+            IEnumerable<Spice> spices = await _spiceRepository.GetAllSpicesAsync();
+            var spiceDtos = _mapper.Map<IEnumerable<Spice>, List<SpiceDTO>>(spices);
+            _logger.LogInformation("List of all spices: [{0}]", string.Join(", ", spiceDtos));
+            return Ok(spiceDtos);
         }
 
         // GET: api/Spices/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Spice>> GetSpice(int id)
+        public async Task<ActionResult<SpiceDTO>> GetSpice(int id)
         {
-            var spice = await _context.Spices.FindAsync(id);
-
-            if (spice == null)
-            {
-                return NotFound();
-            }
-
-            return spice;
+            Spice? spice = await _spiceRepository.GetSpiceByIdAsync(id);
+            if (spice is null) return NotFound($"Spice with id {id} not found");
+            return Ok(_mapper.Map<Spice, SpiceDTO>(spice));
         }
 
-        // PUT: api/Spices/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutSpice(int id, Spice spice)
-        {
-            if (id != spice.SpiceId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(spice).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SpiceExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        // POST: api/Spices
-        [HttpPost("{drawerId}")]
+        [HttpPost("drawer/{drawerId}")]
         public async Task<ActionResult<SpiceDTO>> PostSpice(int drawerId, [FromBody] AddSpiceDTO addSpiceDto)
         {
             await _unitOfWork.BeginTransaction();
@@ -107,7 +64,7 @@ namespace IndekserPrzypraw.Controllers
                 {
                     spiceGroup = await _spiceGroupRepository.AddSpiceGroupAsync(addSpiceDto.Name, null, null);
                 }
-                Spice spice = await _spiceRepository.AddSpice(new Spice()
+                Spice spice = await _spiceRepository.AddSpiceAsync(new Spice()
                 {
                     SpiceGroupId = spiceGroup.SpiceGroupId,
                     DrawerId = drawer.DrawerId,
@@ -125,26 +82,34 @@ namespace IndekserPrzypraw.Controllers
             }
             
         }
+        
+        [HttpGet("drawer/{drawerId}")]
+        public async Task<ActionResult<SpiceDTO>> GetSpicesInDrawer(int drawerId)
+        {
+            IEnumerable<Spice> spices = await _spiceRepository.GetAllSpicesFromDrawerAsync(drawerId);
+            List<SpiceDTO> spiceDtos = _mapper.Map<IEnumerable<Spice>, List<SpiceDTO>>(spices);
+
+            return Ok(spiceDtos);
+        }
 
         // DELETE: api/Spices/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSpice(int id)
         {
-            var spice = await _context.Spices.FindAsync(id);
-            if (spice is null)
+            Spice? spice = await _spiceRepository.GetSpiceByIdAsync(id);
+            if (spice is null) return NotFound($"Spice with id {id} not found");
+            await _unitOfWork.BeginTransaction();
+            try
             {
-                return NotFound();
+                await _spiceRepository.DeleteSpiceAsync(spice);
+                await _unitOfWork.Commit();
+                return NoContent();
             }
-
-            _context.Spices.Remove(spice);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool SpiceExists(int id)
-        {
-            return _context.Spices.Any(e => e.SpiceId == id);
+            catch
+            {
+                await _unitOfWork.Rollback();
+                return BadRequest();
+            }
         }
     }
 }

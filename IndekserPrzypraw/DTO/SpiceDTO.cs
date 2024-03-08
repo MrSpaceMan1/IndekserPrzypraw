@@ -1,5 +1,3 @@
-using IndekserPrzypraw.Domain;
-
 namespace IndekserPrzypraw.DTO;
 
 public record SpiceDTO(

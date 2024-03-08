@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using IndekserPrzypraw.Domain;
 using Microsoft.EntityFrameworkCore;
 using Mono.TextTemplating;
 

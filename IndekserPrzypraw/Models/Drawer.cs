@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
-using IndekserPrzypraw.Domain;
 
 namespace IndekserPrzypraw.Models;
 

@@ -1,4 +1,3 @@
-using IndekserPrzypraw.Domain;
 using IndekserPrzypraw.Models;
 using IndekserPrzypraw.Profiles;
 using Microsoft.EntityFrameworkCore;
