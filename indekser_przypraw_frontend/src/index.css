@@ -1,0 +1,76 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  /*font-synthesis: none;*/
+  /*text-rendering: optimizeLegibility;*/
+  /*-webkit-font-smoothing: antialiased;*/
+  /*-moz-osx-font-smoothing: grayscale;*/
+
+  --primary-base: #5DA0BB;
+  --primary-100: #D1E9F7;
+  --primary-200: #76C8EA;
+  --primary-300: #5DA0BB;
+  --primary-400: #45798E;
+  --primary-500: #2F5564;
+  --primary-600: #1A333D;
+  --primary-700: #071419;
+
+  --secondary-base: #5D72BB;
+  --secondary-100: #E6E8F4;
+  --secondary-150: #CFD4EB;
+  --secondary-200: #B8C0E2;
+  --secondary-300: #8B98D0;
+  --secondary-400: #5D72BB;
+  --secondary-500: #415086;
+  --secondary-600: #263054;
+  --secondary-700: #0E1427;
+
+  --tertiary-base: #5DBBA7;
+  --tertiary-100: #C8FBEE;
+  --tertiary-200: #74E6CD;
+  --tertiary-300: #5DBBA7;
+  --tertiary-400: #479282;
+  --tertiary-500: #336B5F;
+  --tertiary-600: #1F473E;
+  --tertiary-700: #0D2520;
+
+  --red-base: #E87F7F;
+  --red-500: #F21313;
+}
+
+html, body {
+  margin: 0;
+  height: 100dvh;
+  overflow: scroll;
+}
+
+.jetbrains-mono-normal {
+  font-family: "JetBrains Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.jetbrains-mono-bold {
+  font-family: "JetBrains Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.jetbrains-mono-very-bold {
+  font-family: "JetBrains Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.ReactCollapse--collapse {
+  transition: height 500ms;
+}
