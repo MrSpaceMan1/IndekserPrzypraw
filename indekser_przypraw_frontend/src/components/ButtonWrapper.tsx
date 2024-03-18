@@ -1,5 +1,4 @@
 import { ReactElement, MouseEvent } from 'react'
-import '@/App.css'
 
 export default function ButtonWrapper({
   children,

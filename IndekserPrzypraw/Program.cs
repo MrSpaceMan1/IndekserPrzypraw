@@ -1,9 +1,11 @@
 using System.Reflection;
 using IndekserPrzypraw.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Logging.AddSimpleConsole();
 // Add services to the container.
@@ -20,6 +22,17 @@ builder.Services.AddDbContext<SpicesContext>(options =>
 builder.Services.AddControllers();
 
 var app = builder.Build();
+
+app.UseCors(opt => opt.WithOrigins(
+  app
+    .Configuration
+    .GetSection("FrontendHost")
+    .AsEnumerable()
+    .Select(pair => pair.Value)
+    .Where(v => v is not null)
+    .ToArray()
+  ));
+app.MapGet("/", async context => await context.Response.WriteAsync("OK"));
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) {

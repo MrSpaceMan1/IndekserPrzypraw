@@ -25,7 +25,24 @@ namespace IndekserPrzypraw.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("IndekserPrzypraw.Domain.Spice", b =>
+            modelBuilder.Entity("IndekserPrzypraw.Models.Drawer", b =>
+                {
+                    b.Property<int>("DrawerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("DrawerId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("DrawerId");
+
+                    b.ToTable("Drawers");
+                });
+
+            modelBuilder.Entity("IndekserPrzypraw.Models.Spice", b =>
                 {
                     b.Property<int>("SpiceId")
                         .ValueGeneratedOnAdd()
@@ -54,7 +71,7 @@ namespace IndekserPrzypraw.Migrations
                     b.ToTable("Spices");
                 });
 
-            modelBuilder.Entity("IndekserPrzypraw.Domain.SpiceGroup", b =>
+            modelBuilder.Entity("IndekserPrzypraw.Models.SpiceGroup", b =>
                 {
                     b.Property<int>("SpiceGroupId")
                         .ValueGeneratedOnAdd()
@@ -77,25 +94,7 @@ namespace IndekserPrzypraw.Migrations
                     b.ToTable("SpiceGroups");
                 });
 
-            modelBuilder.Entity("IndekserPrzypraw.Models.Drawer", b =>
-                {
-                    b.Property<int>("DrawerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("DrawerId"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("character varying(3)");
-
-                    b.HasKey("DrawerId");
-
-                    b.ToTable("Drawers");
-                });
-
-            modelBuilder.Entity("IndekserPrzypraw.Domain.Spice", b =>
+            modelBuilder.Entity("IndekserPrzypraw.Models.Spice", b =>
                 {
                     b.HasOne("IndekserPrzypraw.Models.Drawer", "Drawer")
                         .WithMany("Spices")
@@ -103,7 +102,7 @@ namespace IndekserPrzypraw.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IndekserPrzypraw.Domain.SpiceGroup", "SpiceGroup")
+                    b.HasOne("IndekserPrzypraw.Models.SpiceGroup", "SpiceGroup")
                         .WithMany()
                         .HasForeignKey("SpiceGroupId")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IndekserPrzypraw")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7c15a186c40df093c3a01d4043d05031e932f0ff")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d3b2e75570088b4408ee312fa028b91ce93d4517")]
 [assembly: System.Reflection.AssemblyProductAttribute("IndekserPrzypraw")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IndekserPrzypraw")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

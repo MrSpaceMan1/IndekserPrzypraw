@@ -256,3 +256,4 @@ C:\Users\MrSpaceMan1\RiderProjects\IndekserPrzypraw\IndekserPrzypraw\bin\Debug\n
 C:\Users\MrSpaceMan1\RiderProjects\IndekserPrzypraw\IndekserPrzypraw\bin\Debug\net8.0\Castle.Core.dll
 C:\Users\MrSpaceMan1\RiderProjects\IndekserPrzypraw\IndekserPrzypraw\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Proxies.dll
 C:\Users\MrSpaceMan1\RiderProjects\IndekserPrzypraw\IndekserPrzypraw\bin\Debug\net8.0\AutoMapper.dll
+C:\Users\MrSpaceMan1\RiderProjects\IndekserPrzypraw\IndekserPrzypraw\obj\Debug\net8.0\IndekserPrzypraw.sourcelink.json

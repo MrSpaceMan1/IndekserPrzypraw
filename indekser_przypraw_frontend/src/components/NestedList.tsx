@@ -1,38 +1,35 @@
 import { ReactElement, useState } from 'react'
 import { Collapse } from 'react-collapse'
 import ButtonWrapper from '@/components/ButtonWrapper.tsx'
-import { join } from '@/utils.ts'
-
-function mapIfArray(
-  children: ReactElement[] | ReactElement,
-  map: (r: ReactElement) => ReactElement
-) {
-  if (Array.isArray(children)) return children.map(map)
-  return map(children)
-}
+import { join, mapIfArray } from '@/utils.ts'
 
 export default function NestedList({
   children,
   header,
+  label,
   listItemClassNames,
   listClassNames,
 }: NestedListParams) {
-  const [isCollapsed, setIsCollapsed] = useState(!header)
+  const [isCollapsed, setIsCollapsed] = useState(!label)
   function toggleCollapse() {
     setIsCollapsed((collapsed) => !collapsed)
   }
 
+  function mapToListItem(item: ReactElement) {
+    return <li className={listItemClassNames}>{item}</li>
+  }
+
   return (
     <>
-      {header && (
-        <ButtonWrapper onClick={toggleCollapse}>{header}</ButtonWrapper>
-      )}
+      {label && <ButtonWrapper onClick={toggleCollapse}>{label}</ButtonWrapper>}
       <Collapse isOpened={isCollapsed}>
         <ol className={join(' ', listClassNames ?? '')}>
-          {children &&
-            mapIfArray(children, (child) => (
-              <li className={listItemClassNames}>{child}</li>
-            ))}
+          {children && (
+            <>
+              {header && mapToListItem?.(header)}
+              {mapIfArray(children, mapToListItem)}
+            </>
+          )}
         </ol>
       </Collapse>
     </>
@@ -40,6 +37,7 @@ export default function NestedList({
 }
 
 interface NestedListParams {
+  label?: ReactElement
   header?: ReactElement
   openByDefault?: boolean
   children?: ReactElement[] | ReactElement | null

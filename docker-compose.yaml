@@ -1,0 +1,25 @@
+name: indekserprzypraw
+
+services:
+  database:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=password
+  aspapp:
+    build: ./IndekserPrzypraw
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+  reactapp:
+    build: ./indekser_przypraw_frontend
+    ports:
+      - 5173:5173
+    depends_on:
+      - aspapp
+    environment:
+      - VITE_API_HOST=  http://192.168.0.110:8080/
+    volumes:
+      - ./indekser_przypraw_frontend:/app

@@ -12,7 +12,7 @@ public interface ISpiceRepository
   Task<IEnumerable<Spice>> GetAllSpicesAsync();
   Task<IEnumerable<Spice>> GetAllSpicesFromDrawerAsync(int drawerId);
   Task<Spice?> GetSpiceByIdAsync(int id);
-  Task<IEnumerable<IGrouping<string,Spice>>> GetSpiceGroupsFromDrawerAsync(int drawerId);
+  Task<IEnumerable<IGrouping<string,Spice>>> GetSpiceByGroupsAsync(int drawerId);
 
   Task DeleteSpiceAsync(Spice spice);
 
@@ -62,7 +62,7 @@ public class SpiceRepository : ISpiceRepository
     return await _context.Spices.AsNoTracking().FirstOrDefaultAsync(spice => spice.SpiceId == id);
   }
 
-  public async Task<IEnumerable<IGrouping<string,Spice>>> GetSpiceGroupsFromDrawerAsync(int drawerId)
+  public async Task<IEnumerable<IGrouping<string,Spice>>> GetSpiceByGroupsAsync(int drawerId)
   {
     ICollection<IGrouping<string,Spice>> spiceGroups;
     await using (_context)
