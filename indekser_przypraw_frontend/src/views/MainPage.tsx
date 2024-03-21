@@ -53,7 +53,10 @@ export default function MainPage() {
         isOpen={sideMenuOpen}
         closeMenu={closeSideMenu}
         backdropRef={sideMenuBackdropRef}
-      ></SideMenu>
+      >
+        <p className="menu-item">Drawer 1</p>
+        <p className="menu-item">Drawer 2</p>
+      </SideMenu>
       <header className="header">
         <ButtonWrapper onClick={openSideMenu}>
           <img src={hamburgerMenuSvg} className="header-icon" />

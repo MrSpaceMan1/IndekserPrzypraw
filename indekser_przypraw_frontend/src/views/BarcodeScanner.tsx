@@ -9,14 +9,15 @@ export default function BarcodeScanner() {
   const [cameraError, setCameraError] = useState<string>()
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([])
   const videoRef = useRef<HTMLVideoElement>(null)
-  const mediaStream = useRef<MediaStream>(null)
+  const mediaStream = useRef<MediaStream>()
+  const cameraPickedId = useRef('')
 
-  async function getVideoStream(ev: ChangeEvent<HTMLSelectElement>) {
+  async function getVideoStream(cameraId: string) {
     mediaStream.current?.getTracks().forEach((track) => track.stop())
     navigator.mediaDevices
       .getUserMedia({
         video: {
-          deviceId: ev.target.selectedOptions?.[0].value,
+          deviceId: cameraId,
         },
       })
       .then((currentMediaStream) => {
@@ -62,12 +63,19 @@ export default function BarcodeScanner() {
     <div id="barcode-scanner" className="">
       {cameraError && cameraError}
       {cameras && JSON.stringify(cameras)}
-      <select onChange={getVideoStream}>
+      <select
+        onChange={(e) => {
+          cameraPickedId.current = e.target.selectedOptions?.[0].value
+        }}
+      >
         {cameras.length &&
           cameras.map((camera) => (
             <option value={camera.deviceId}>{camera.label}</option>
           ))}
       </select>
+      <button onClick={() => getVideoStream(cameraPickedId.current)}>
+        Use camera
+      </button>
       <video autoPlay={true} ref={videoRef}></video>
     </div>
   )
