@@ -1,8 +1,36 @@
-.slidein-from-left{
+.slidein-from-left {
   animation: slidein-from-left 1s;
 }
 
 @keyframes slidein-from-left {
-  0%{transform: translateX(100%)}
-  100%{transform: translateX(0)}
+  0% {
+    transform: translateX(100%)
+  }
+  100% {
+    transform: translateX(0)
+  }
+}
+
+#barcode-scanner {
+  height: 100%;
+}
+
+#barcode-scanner {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.cameraFeed {
+  height: 100%;
+}
+
+.cameraFeed > video, canvas {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  z-index: -1;
+  left: 0;
+  top: 0;
 }

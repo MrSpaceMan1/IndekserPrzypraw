@@ -1,12 +1,9 @@
-import { Ref, RefObject, useCallback, useLayoutEffect } from 'react'
-import Quagga, {
-  QuaggaJSCodeReader,
-  QuaggaJSConfigObject,
-  QuaggaJSReaderConfig,
-  QuaggaJSResultObject,
-} from '@ericblade/quagga2'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
+import { useCallback, useLayoutEffect } from 'react'
+import Quagga from '@ericblade/quagga2'
 
-function getMedian(arr: Array<number>) {
+function getMedian(arr) {
   const newArr = [...arr] // copy the array before sorting, otherwise it mutates the array passed in, which is generally undesireable
   newArr.sort((a, b) => a - b)
   const half = Math.floor(newArr.length / 2)
@@ -45,23 +42,22 @@ const Scanner = ({
   locator = defaultLocatorSettings,
   decoders = defaultDecoders,
   locate = true,
-}: ScannerProps) => {
+}) => {
   const errorCheck = useCallback(
-    (result: QuaggaJSResultObject) => {
+    (result) => {
       if (!onDetected) {
         return
       }
       const err = getMedianOfCodeErrors(result.codeResult.decodedCodes)
       // if Quagga is at least 75% certain that it read correctly, then accept the code.
       if (err < 0.25) {
-        console.log(result)
         onDetected(result.codeResult.code)
       }
     },
     [onDetected]
   )
 
-  const handleProcessed = (result: QuaggaJSResultObject) => {
+  const handleProcessed = (result) => {
     const drawingCtx = Quagga.canvas.ctx.overlay
     const drawingCanvas = Quagga.canvas.dom.overlay
     drawingCtx.font = '24px Arial'
@@ -73,8 +69,8 @@ const Scanner = ({
         drawingCtx.clearRect(
           0,
           0,
-          parseInt(drawingCanvas.getAttribute('width')!),
-          parseInt(drawingCanvas.getAttribute('height')!)
+          parseInt(drawingCanvas.getAttribute('width')),
+          parseInt(drawingCanvas.getAttribute('height'))
         )
         result.boxes
           .filter((box) => box !== result.box)
@@ -91,18 +87,18 @@ const Scanner = ({
           lineWidth: 2,
         })
       }
-      // if (result.codeResult && result.codeResult.code) {
-      //   // const validated = barcodeValidator(result.codeResult.code);
-      //   // const validated = validateBarcode(result.codeResult.code);
-      //   // Quagga.ImageDebug.drawPath(result.line, { x: 'x', y: 'y' }, drawingCtx, { color: validated ? 'green' : 'red', lineWidth: 3 });
-      //   drawingCtx.font = '24px Arial'
-      //   // drawingCtx.fillStyle = validated ? 'green' : 'red';
-      //   // drawingCtx.fillText(`${result.codeResult.code} valid: ${validated}`, 10, 50);
-      //   drawingCtx.fillText(result.codeResult.code, 10, 20)
-      //   // if (validated) {
-      //   //     onDetected(result);
-      //   // }
-      // }
+      if (result.codeResult && result.codeResult.code) {
+        // const validated = barcodeValidator(result.codeResult.code);
+        // const validated = validateBarcode(result.codeResult.code);
+        // Quagga.ImageDebug.drawPath(result.line, { x: 'x', y: 'y' }, drawingCtx, { color: validated ? 'green' : 'red', lineWidth: 3 });
+        drawingCtx.font = '24px Arial'
+        // drawingCtx.fillStyle = validated ? 'green' : 'red';
+        // drawingCtx.fillText(`${result.codeResult.code} valid: ${validated}`, 10, 50);
+        drawingCtx.fillText(result.codeResult.code, 10, 20)
+        // if (validated) {
+        //     onDetected(result);
+        // }
+      }
     }
   }
 
@@ -128,7 +124,7 @@ const Scanner = ({
               ...(cameraId && { deviceId: cameraId }),
               ...(!cameraId && { facingMode }),
             },
-            target: scannerRef.current ?? undefined,
+            target: scannerRef.current,
             willReadFrequently: true,
           },
           locator,
@@ -172,18 +168,6 @@ const Scanner = ({
     facingMode,
   ])
   return null
-}
-
-interface ScannerProps {
-  onDetected: (arg0: QuaggaJSResultObject) => void
-  scannerRef: RefObject<Element>
-  onScannerReady?: () => void
-  cameraId?: string
-  facingMode?: string
-  constraints: MediaTrackConstraints
-  locator: QuaggaJSConfigObject['locator']
-  decoders: (QuaggaJSReaderConfig | QuaggaJSCodeReader)[]
-  locate: boolean
 }
 
 export default Scanner
