@@ -6,5 +6,6 @@ public record SpiceDTO(
   DateOnly ExpirationDate, 
   uint Grams,
   int SpiceGroupId, 
-  int DrawerId
+  int DrawerId,
+  string Barcode
   );

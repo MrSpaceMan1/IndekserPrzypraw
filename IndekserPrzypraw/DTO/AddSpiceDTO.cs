@@ -7,5 +7,7 @@ public record AddSpiceDTO(
     string Name,
     [Required]
     uint Grams,
-    DateOnly ExpirationDate
+    DateOnly ExpirationDate,
+    [Required]
+    string Barcode
   );

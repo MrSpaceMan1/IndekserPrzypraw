@@ -6,22 +6,33 @@ namespace IndekserPrzypraw.Repositories;
 
 public interface ISpiceGroupRepository
 {
+  Task<SpiceGroup?> GetSpiceByBarcodeAsync(string barcode);
   Task<IEnumerable<SpiceGroup>> GetAllSpiceGroupsAsync();
   Task<SpiceGroup?> GetSpiceGroupByIdAsync(int spiceGroupId);
   Task<SpiceGroup?> GetSpiceGroupByNameAsync(string spiceGroupName);
-  Task<SpiceGroup> AddSpiceGroupAsync(string name, uint? minimumCount, uint? minimumGrams);
+  Task<SpiceGroup> AddSpiceGroupAsync(string name, string barcode,
+    uint grams, uint? minimumCount, uint? minimumGrams);
 }
 
 public class SpiceGroupRepository : ISpiceGroupRepository
 {
   private readonly SpicesContext _context;
   private readonly UnitOfWork<SpicesContext> _unitOfWork;
+
   public SpiceGroupRepository(UnitOfWork<SpicesContext> unitOfWork)
   {
     _unitOfWork = unitOfWork;
     _context = unitOfWork.Context;
   }
-  
+
+  public async Task<SpiceGroup?> GetSpiceByBarcodeAsync(string barcode)
+  {
+    return await _context.SpiceGroups
+      .AsNoTracking()
+      .Where(group => group.Barcode == barcode)
+      .FirstOrDefaultAsync();
+  }
+
   public async Task<IEnumerable<SpiceGroup>> GetAllSpiceGroupsAsync()
   {
     return await _context.SpiceGroups
@@ -45,17 +56,21 @@ public class SpiceGroupRepository : ISpiceGroupRepository
       .FirstOrDefaultAsync();
   }
 
-  public async Task<SpiceGroup> AddSpiceGroupAsync(string name, uint? minimumCount, uint? minimumGrams)
+  public async Task<SpiceGroup> AddSpiceGroupAsync(string name, string barcode,
+    uint grams, uint? minimumCount, uint? minimumGrams)
   {
     SpiceGroup newSpiceGroup = new SpiceGroup
     {
       Name = name,
+      Grams = grams,
       MinimumCount = minimumCount,
-      MinimumGrams = minimumGrams
+      MinimumGrams = minimumGrams,
+      Barcode = barcode,
+      
     };
 
     _context.SpiceGroups.Add(newSpiceGroup);
     await _context.SaveChangesAsync();
-    return newSpiceGroup; 
+    return newSpiceGroup;
   }
 }
