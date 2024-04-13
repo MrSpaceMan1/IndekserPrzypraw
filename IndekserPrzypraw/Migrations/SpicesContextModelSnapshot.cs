@@ -56,9 +56,6 @@ namespace IndekserPrzypraw.Migrations
                     b.Property<DateOnly>("ExpirationDate")
                         .HasColumnType("date");
 
-                    b.Property<long>("Grams")
-                        .HasColumnType("bigint");
-
                     b.Property<int>("SpiceGroupId")
                         .HasColumnType("integer");
 

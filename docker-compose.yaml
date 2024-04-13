@@ -11,8 +11,16 @@ services:
     build: ./IndekserPrzypraw
     ports:
       - 8080:8080
+      - 443:443
     depends_on:
       - database
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ~/.aspnet/https:/https:ro
   reactapp:
     build: ./indekser_przypraw_frontend
     ports:
@@ -20,6 +28,6 @@ services:
     depends_on:
       - aspapp
     environment:
-      - VITE_API_HOST=  http://192.168.0.110:8080/
+      - VITE_API_HOST=localhost:8080
     volumes:
       - ./indekser_przypraw_frontend:/app

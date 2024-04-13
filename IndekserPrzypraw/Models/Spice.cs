@@ -12,12 +12,9 @@ public class Spice
   public int DrawerId { get; set; }
   public virtual Drawer Drawer { get; set; }
   public DateOnly ExpirationDate { get; set; }
-  public uint Grams { get; set; }
-
   public override string ToString()
   {
-    return $"{nameof(SpiceId)}: {SpiceId}, {nameof(SpiceGroupId)}: {SpiceGroupId}, " +
-           $"{nameof(DrawerId)}: {DrawerId}, {nameof(ExpirationDate)}: {ExpirationDate}, " +
-           $"{nameof(Grams)}: {Grams}";
+      return $"{nameof(SpiceId)}: {SpiceId}, {nameof(SpiceGroupId)}: {SpiceGroupId}, " +
+             $"{nameof(DrawerId)}: {DrawerId}, {nameof(ExpirationDate)}: {ExpirationDate}, ";
   }
 }

@@ -27,6 +27,14 @@ namespace IndekserPrzypraw.Controllers
             _logger = logger;
         }
 
+        [HttpGet("barcode/{barcode}")]
+        public async Task<ActionResult<BarcodeInfoDTO>> GetBarcodeInfo(string barcode)
+        {
+            BarcodeInfoDTO? barcodeInfoDto = await _spiceService.GetSpiceByBarcodeAsync(barcode);
+            if (barcodeInfoDto is null) return NotFound();
+            return Ok(barcodeInfoDto);
+        }
+        
         // GET: api/Spices
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SpiceDTO>>> GetSpices()

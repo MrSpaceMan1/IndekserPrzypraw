@@ -2,7 +2,7 @@ namespace IndekserPrzypraw.DTO;
 
 public class BarcodeInfoDTO
 {
-  public readonly string Barcode;
-  public readonly string Name;
-  public readonly uint Grams;
+  public string Barcode { get; set; }
+  public string Name { get; set; }
+  public uint Grams { get; set; }
 }

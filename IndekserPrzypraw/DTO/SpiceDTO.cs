@@ -1,6 +1,6 @@
 namespace IndekserPrzypraw.DTO;
 
-public record SpiceDTO(
+public class SpiceDTO(
   int SpiceId, 
   string Name,
   DateOnly ExpirationDate, 

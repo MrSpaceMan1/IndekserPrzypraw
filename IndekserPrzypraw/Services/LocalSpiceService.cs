@@ -62,7 +62,6 @@ public class LocalSpiceService : ISpiceService
       SpiceGroupId = spiceGroup.SpiceGroupId,
       DrawerId = drawer.DrawerId,
       ExpirationDate = addSpiceDto.ExpirationDate,
-      Grams = addSpiceDto.Grams
     });
     await _unitOfWork.Commit();
 

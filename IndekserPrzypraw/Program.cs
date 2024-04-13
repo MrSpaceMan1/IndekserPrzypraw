@@ -20,7 +20,7 @@ builder.Services.AddDbContext<SpicesContext>(options =>
     )
 );
 builder.Services.AddControllers();
-
+builder.Services.AddHttpsRedirection(opt => opt.HttpsPort = 443);
 var app = builder.Build();
 
 app.UseCors(opt => opt.WithOrigins(

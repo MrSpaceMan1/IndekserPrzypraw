@@ -1,19 +1,28 @@
-import Quagga, {
-  QuaggaJSResultObject,
-  QuaggaJSResultObject_CodeResult,
-} from '@ericblade/quagga2'
+import Quagga, { QuaggaJSResultObject } from '@ericblade/quagga2'
 import { useEffectOnce } from '@/hooks/UseEffectOnce.ts'
 import './MainPage.css'
 import './BarcodeScanner.css'
 import { useEffect, useRef, useState } from 'react'
-import adapter from 'webrtc-adapter'
+import spiceApi from '@/wretchConfig.ts'
+import BarcodeInfo from '@/types/BarcodeInfo.ts'
+import {
+  clearFetchedBarcodeInfo,
+  setFetchedBarcodeInfo,
+} from '@/stores/barcodeScannerStore.ts'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { useTouch } from '@/components/TouchRegionContext.tsx'
 
 export default function BarcodeScanner() {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const outputRef = useRef<HTMLDivElement>(null)
   const [deviceId, setDeviceId] = useState<string>('')
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([])
-  const [text, setText] = useState('')
+  const isFetchingBarcodeInfo = useRef(false)
 
+  const touch = useTouch();
+  
   function handleProcessed(result: QuaggaJSResultObject) {
     const drawingCtx = Quagga.canvas.ctx.overlay
     const drawingCanvas = Quagga.canvas.dom.overlay
@@ -47,6 +56,24 @@ export default function BarcodeScanner() {
     }
   }
 
+  function checkEan13Validity(barcode: string): boolean {
+    const evenNumbers: number[] = []
+    const oddNumbers: number[] = []
+    for (let i = 1; i < 13; i += 2) {
+      evenNumbers.push(parseInt(barcode[i]))
+    }
+    for (let i = 0; i < 12; i += 2) {
+      oddNumbers.push(parseInt(barcode[i]))
+    }
+    const sum =
+      (evenNumbers.reduce((acc, cur) => acc + cur, 0) * 3 +
+        oddNumbers.reduce((acc, cur) => acc + cur, 0)) %
+      10
+    const digit = sum === 0 ? 0 : 10 - sum
+    // window.alert(`${evenNumbers}\n${oddNumbers}\n${digit}`)
+    return parseInt(barcode[12]) === digit
+  }
+
   function getMedian(arr: number[]) {
     const newArr = [...arr] // copy the array before sorting, otherwise it mutates the array passed in, which is generally undesireable
     newArr.sort((a, b) => a - b)
@@ -63,23 +90,44 @@ export default function BarcodeScanner() {
     const errors = decodedCodes
       .filter((x) => !!x.error)
       .flatMap((x) => x.error!)
-    const medianOfErrors = getMedian(errors)
-    return medianOfErrors
+    return getMedian(errors)
   }
 
-  function handleDetected(result: QuaggaJSResultObject) {
+  async function handleDetected(result: QuaggaJSResultObject) {
+    
+    if (isFetchingBarcodeInfo.current) return
     const err = getMedianOfCodeErrors(result.codeResult.decodedCodes)
-    // if Quagga is at least 75% certain that it read correctly, then accept the code.
-    if (err < 0.1) {
-      setText(result.codeResult.code!)
+    if (err < 0.25 && checkEan13Validity(result.codeResult.code!)) {
+      isFetchingBarcodeInfo.current = true
+      spiceApi
+        .get(`Spices/barcode/${result.codeResult.code}`)
+        .notFound(() => {
+          dispatch(
+            setFetchedBarcodeInfo({
+              Barcode: result.codeResult.code!,
+              Grams: 0,
+              Name: '',
+            })
+          )
+        })
+        .json<BarcodeInfo>((barcode) => {
+          dispatch(setFetchedBarcodeInfo(barcode))
+          return barcode
+        })
+        .finally(() => {
+          isFetchingBarcodeInfo.current = false
+          navigate('/add-spice')
+          Quagga.stop()
+        })
     }
   }
 
   useEffectOnce(() => {
+    dispatch(clearFetchedBarcodeInfo())
     Quagga.CameraAccess.request(null, {
       aspectRatio: { min: 1, max: 2, ideal: 1.77 },
       facingMode: 'enviroment',
-      height: { min: 720, ideal: 1920 },
+      height: { min: 720 },
       frameRate: { min: 30, ideal: 60 },
     }).then(() => {
       navigator.mediaDevices
@@ -97,18 +145,6 @@ export default function BarcodeScanner() {
 
   useEffect(() => {
     if (!deviceId) return
-    console.log({
-      type: 'LiveStream',
-      willReadFrequently: true,
-      target: outputRef.current ?? undefined,
-      constraints: {
-        aspectRatio: { min: 1, max: 2, ideal: 1.77 },
-        ...(deviceId && { deviceId: deviceId }),
-        facingMode: 'enviroment',
-        height: { min: 720, ideal: 1920 },
-        frameRate: { min: 30, ideal: 60 },
-      },
-    })
     Quagga.init({
       inputStream: {
         type: 'LiveStream',
@@ -118,16 +154,16 @@ export default function BarcodeScanner() {
           aspectRatio: { min: 1, max: 2, ideal: 1.77 },
           ...(deviceId && { deviceId: deviceId }),
           facingMode: 'enviroment',
-          height: { min: 720, ideal: 1920 },
-          frameRate: { min: 30, ideal: 60 },
+          height: { min: 720 },
+          frameRate: { min: 30 },
         },
       },
       locate: true,
       locator: {
         halfSample: true,
-        patchSize: 'medium',
+        patchSize: 'large',
       },
-      frequency: 10,
+      frequency: 15,
       decoder: {
         readers: ['ean_reader'],
       },
@@ -135,7 +171,6 @@ export default function BarcodeScanner() {
       .then(() => {
         Quagga.onDetected((data) => {
           handleDetected(data)
-          Quagga.stop()
         })
         Quagga.onProcessed(handleProcessed)
         Quagga.start()
@@ -163,7 +198,7 @@ export default function BarcodeScanner() {
           </option>
         ))}
       </select>
-      {!text ? <div ref={outputRef} className="cameraFeed"></div> : text}
+      <div ref={outputRef} className="cameraFeed"></div>
     </div>
   )
 }
