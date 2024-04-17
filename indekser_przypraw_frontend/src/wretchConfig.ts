@@ -1,8 +1,8 @@
 import wretch from 'wretch'
 
-// const apiUrl = import.meta.env.VITE_API_HOST ?? 'localhost:8080'
-const apiUrl = "192.168.0.45"
+// const apiUrl = import.meta.env.VITE_API_HOST ?? window.location.hostname + ':7027'
+const apiUrl = window.location.hostname
 
-const spiceApi = wretch("https://" + apiUrl + '/api/')
+const spiceApi = wretch('https://' + apiUrl + '/api/')
 
 export default spiceApi

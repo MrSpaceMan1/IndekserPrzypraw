@@ -1,10 +1,10 @@
 interface Spice {
-  SpiceId: number
-  Name: string
-  ExpirationDate: Date
-  Grams: number
-  SpiceGroupId: number
-  DrawerId: number
+  spiceId: number
+  name: string
+  expirationDate: 'string'
+  grams: number
+  spiceGroupId: number
+  drawerId: number
 }
 
 export type { Spice }

@@ -1,46 +1,40 @@
-import { ReactElement, useState } from 'react'
+import { ReactElement, ReactNode, useState } from 'react'
 import { Collapse } from 'react-collapse'
 import ButtonWrapper from '@/components/ButtonWrapper.tsx'
-import { join, mapIfArray } from '@/utils.ts'
+import './NestedList.css'
 
 export default function NestedList({
   children,
-  header,
   label,
-  listItemClassNames,
-  listClassNames,
+  headerClassNames = [],
 }: NestedListParams) {
   const [isCollapsed, setIsCollapsed] = useState(!label)
   function toggleCollapse() {
     setIsCollapsed((collapsed) => !collapsed)
   }
 
-  function mapToListItem(item: ReactElement) {
-    return <li className={listItemClassNames}>{item}</li>
-  }
-
   return (
-    <>
-      {label && <ButtonWrapper onClick={toggleCollapse}>{label}</ButtonWrapper>}
+    <div>
+      {label && (
+        <ButtonWrapper
+          onClick={toggleCollapse}
+          additionalClasses={headerClassNames}
+        >
+          {label}
+        </ButtonWrapper>
+      )}
+
       <Collapse isOpened={isCollapsed}>
-        <ol className={join(' ', listClassNames ?? '')}>
-          {children && (
-            <>
-              {header && mapToListItem?.(header)}
-              {mapIfArray(children, mapToListItem)}
-            </>
-          )}
-        </ol>
+        <div>{children}</div>
       </Collapse>
-    </>
+    </div>
   )
 }
 
 interface NestedListParams {
   label?: ReactElement
-  header?: ReactElement
   openByDefault?: boolean
-  children?: ReactElement[] | ReactElement | null
-  listClassNames?: string
-  listItemClassNames?: string
+  children?: ReactNode[] | ReactNode | null
+  listClassNames?: string[]
+  headerClassNames?: string[]
 }

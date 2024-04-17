@@ -1,0 +1,15 @@
+.sm-icon{
+  height: 1rem;
+  width: 1rem;
+}
+
+.list-button{
+  margin: 0;
+  padding: 0.5em;
+}
+
+.list-item{
+  display: grid;
+  grid-template-columns: min-content 1fr 1fr min-content;
+  gap: 1rem
+}

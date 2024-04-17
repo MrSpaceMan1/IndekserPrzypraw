@@ -7,20 +7,28 @@ import { useTouch } from '@/components/TouchRegionContext.tsx'
 import hamburgerMenuSvg from '@/assets/hamburger_menu.svg'
 import gearSvg from '@/assets/gear.svg'
 import addNewSvg from '@/assets/add_new.svg'
+import crossSvg from '@/assets/cross.svg'
 import './MainPage.css'
 import { setDebugMessage } from '@/stores/debugStore.ts'
 import { useNavigate } from 'react-router-dom'
+import '../components/NestedListItem.css'
+import '../components/NestedList.css'
+import { addSpiceToDrawer } from '@/stores/SpiceStore.ts'
 
 export default function MainPage() {
   const touch = useTouch()
-  const [sideMenuOpen, setSideMenuOpen] = useState(false)
-  const isSideMenuOpen = useRef(false)
-  const sideMenuBackdropRef = useRef<HTMLDivElement>(null)
-  const debugMessage = useSelector(
-    (state: StoreState) => state.debug.debugMessage
-  )
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  const drawers = useSelector((store: StoreState) => store.spice.drawers)
+
+  const [drawerIndex, setDrawerIndex] = useState<number>(0)
+  const [sideMenuOpen, setSideMenuOpen] = useState(false)
+  const drawer = drawers[drawerIndex]
+
+  const isSideMenuOpen = useRef(false)
+  const sideMenuBackdropRef = useRef<HTMLDivElement>(null)
+
   function openSideMenu() {
     setSideMenuOpen(true)
     isSideMenuOpen.current = true
@@ -47,6 +55,7 @@ export default function MainPage() {
     }
   })
 
+  if (!drawers) return <div>Loading</div>
   return (
     <div id="main-page">
       <SideMenu
@@ -54,59 +63,60 @@ export default function MainPage() {
         closeMenu={closeSideMenu}
         backdropRef={sideMenuBackdropRef}
       >
-        <p className="menu-item">Drawer 1</p>
-        <p className="menu-item">Drawer 2</p>
+        {drawers.map((drawer, index) => (
+          <button
+            className="menu-item"
+            onClick={() => {
+              setDrawerIndex(index)
+              closeSideMenu()
+            }}
+          >
+            {drawer.name}
+          </button>
+        ))}
       </SideMenu>
+
       <header className="header">
         <ButtonWrapper onClick={openSideMenu}>
           <img src={hamburgerMenuSvg} className="header-icon" />
         </ButtonWrapper>
         <h1 className="jetbrains-mono-normal no-text-wrap max-width header-title ">
-          DRAWER
+          {drawer?.name ?? 'Drawer'}
         </h1>
         <ButtonWrapper onClick={() => {}}>
           <img src={gearSvg} className="header-icon black-icon-filter" />
         </ButtonWrapper>
       </header>
-      {debugMessage}
       <div id="main-content">
-        <NestedList listClassNames="no-list-styling">
-          <NestedList
-            label={<h2>TestOWE</h2>}
-            listClassNames={'no-list-styling'}
-          >
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-            <p>ABC </p>
-          </NestedList>
-        </NestedList>
+        {drawer &&
+          drawer.spices.map((spiceGroup) => (
+            <NestedList label={<h2>{spiceGroup.name}</h2>}>
+              <table className={'nested-list-body'}>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Data ważności</th>
+                    <th>Waga</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {spiceGroup.spices.map((spice, index) => (
+                    <tr key={spice.spiceId}>
+                      <td>{index + 1}</td>
+                      <td>{spice.expirationDate}</td>
+                      <td>{spice.grams}g</td>
+                      <td>
+                        <button className={'unset'}>
+                          <img src={crossSvg} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </NestedList>
+          ))}
       </div>
       <div id="action-bar">
         <ButtonWrapper onClick={() => {}}>

@@ -1,4 +1,5 @@
 using IndekserPrzypraw.DTO;
+using IndekserPrzypraw.Models;
 
 namespace IndekserPrzypraw.Profiles.Services;
 
@@ -10,4 +11,6 @@ public interface ISpiceService
   Task<SpiceDTO> AddSpiceAsync(int drawerId, AddSpiceDTO addSpiceDto);
   Task<IEnumerable<SpiceDTO>> GetSpicesInDrawerAsync(int drawerId);
   Task RemoveSpiceAsync(int spiceId);
+
+  Task<Dictionary<string, List<Spice>>>GetSpiceGroups();
 }

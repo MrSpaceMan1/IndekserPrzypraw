@@ -6,13 +6,16 @@ import { Provider } from 'react-redux'
 import { TouchContextProvider } from '@/components/TouchRegionContext.tsx'
 import { RouterProvider } from 'react-router-dom'
 import router from '@/router.tsx'
+import { App } from '@/App.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <TouchContextProvider>
-        <RouterProvider router={router} />
-      </TouchContextProvider>
+      <App>
+        <TouchContextProvider>
+          <RouterProvider router={router} />
+        </TouchContextProvider>
+      </App>
     </Provider>
   </React.StrictMode>
 )

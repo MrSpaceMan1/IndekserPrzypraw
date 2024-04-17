@@ -7,10 +7,10 @@ public class Spice
   public int SpiceId { get; set; }
   [Required]
   public int SpiceGroupId { get; set; }
-  public virtual SpiceGroup SpiceGroup { get; set; }
+  public SpiceGroup SpiceGroup { get; set; }
   [Required]
   public int DrawerId { get; set; }
-  public virtual Drawer Drawer { get; set; }
+  public Drawer Drawer { get; set; }
   public DateOnly ExpirationDate { get; set; }
   public override string ToString()
   {

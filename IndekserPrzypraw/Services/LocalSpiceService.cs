@@ -82,4 +82,11 @@ public class LocalSpiceService : ISpiceService
     await _spiceRepository.DeleteSpiceAsync(spice);
     await _unitOfWork.Commit();
   }
+
+  public async Task<Dictionary<string, List<Spice>>> GetSpiceGroups()
+  {
+    var groups = await _spiceRepository.GetSpiceByGroupsAsync(1);
+    Console.WriteLine(groups.ToString());
+    return groups;
+  }
 }

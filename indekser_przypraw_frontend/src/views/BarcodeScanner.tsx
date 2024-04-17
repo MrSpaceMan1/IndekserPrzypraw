@@ -21,8 +21,6 @@ export default function BarcodeScanner() {
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([])
   const isFetchingBarcodeInfo = useRef(false)
 
-  const touch = useTouch();
-  
   function handleProcessed(result: QuaggaJSResultObject) {
     const drawingCtx = Quagga.canvas.ctx.overlay
     const drawingCanvas = Quagga.canvas.dom.overlay
@@ -70,7 +68,6 @@ export default function BarcodeScanner() {
         oddNumbers.reduce((acc, cur) => acc + cur, 0)) %
       10
     const digit = sum === 0 ? 0 : 10 - sum
-    // window.alert(`${evenNumbers}\n${oddNumbers}\n${digit}`)
     return parseInt(barcode[12]) === digit
   }
 
@@ -94,7 +91,6 @@ export default function BarcodeScanner() {
   }
 
   async function handleDetected(result: QuaggaJSResultObject) {
-    
     if (isFetchingBarcodeInfo.current) return
     const err = getMedianOfCodeErrors(result.codeResult.decodedCodes)
     if (err < 0.25 && checkEan13Validity(result.codeResult.code!)) {
@@ -104,9 +100,9 @@ export default function BarcodeScanner() {
         .notFound(() => {
           dispatch(
             setFetchedBarcodeInfo({
-              Barcode: result.codeResult.code!,
-              Grams: 0,
-              Name: '',
+              barcode: result.codeResult.code!,
+              grams: 0,
+              name: '',
             })
           )
         })

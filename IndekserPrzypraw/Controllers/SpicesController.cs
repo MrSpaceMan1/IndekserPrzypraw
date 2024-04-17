@@ -97,5 +97,12 @@ namespace IndekserPrzypraw.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet("!test")]
+        public async Task<ActionResult> GetSpiceGroups()
+        {
+            var groups = await _spiceService.GetSpiceGroups();
+            return Ok();
+        }
     }
 }

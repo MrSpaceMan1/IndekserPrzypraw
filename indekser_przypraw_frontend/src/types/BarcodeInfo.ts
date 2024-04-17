@@ -1,7 +1,7 @@
 interface BarcodeInfo {
-  Barcode: string;
-  Name: string;
-  Grams: number;
+  barcode: string
+  name: string
+  grams: number
 }
 
-export default BarcodeInfo;
+export default BarcodeInfo

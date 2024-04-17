@@ -12,7 +12,7 @@ public interface ISpiceRepository
   Task<IEnumerable<Spice>> GetAllSpicesAsync();
   Task<IEnumerable<Spice>> GetAllSpicesFromDrawerAsync(int drawerId);
   Task<Spice?> GetSpiceByIdAsync(int id);
-  Task<IEnumerable<IGrouping<string,Spice>>> GetSpiceByGroupsAsync(int drawerId);
+  Task<Dictionary<String, List<Spice>>> GetSpiceByGroupsAsync(int drawerId);
 
   Task DeleteSpiceAsync(Spice spice);
 
@@ -62,18 +62,41 @@ public class SpiceRepository : ISpiceRepository
     return await _context.Spices.AsNoTracking().FirstOrDefaultAsync(spice => spice.SpiceId == id);
   }
 
-  public async Task<IEnumerable<IGrouping<string,Spice>>> GetSpiceByGroupsAsync(int drawerId)
+  public async Task<Dictionary<String, List<Spice>>> GetSpiceByGroupsAsync(int drawerId)
   {
-    ICollection<IGrouping<string,Spice>> spiceGroups;
-    await using (_context)
-    { 
-      spiceGroups = await _context.Spices
+    // Dictionary<String, IEnumerable<Spice>> spiceGroups;
+
+      var spiceGroups = await _context.Spices
         .AsNoTracking()
-        .Where((spice => spice.Drawer.DrawerId == drawerId))
-        .GroupBy((spice => spice.SpiceGroup.Name), (spice => spice))
-        .ToListAsync();
-    }
+        .Where(spice => spice.Drawer.DrawerId == drawerId)
+        .GroupBy(spice => spice.SpiceGroup.Name)
+        .ToDictionaryAsync(group => group.Key, group => group.ToList());
+    
     return spiceGroups;
+  }
+
+  public class GroupByDrawerIdThenSpiceGroupName
+  {
+    public int DrawerId;
+    public string Name;
+    public List<Spice> Spices;
+    public GroupByDrawerIdThenSpiceGroupName(int drawerId, string name, List<Spice> spices)
+    {
+      DrawerId = drawerId;
+      Name = name;
+      Spices = spices;
+    }
+  }
+  
+  public async  Task<List<GroupByDrawerIdThenSpiceGroupName>> GetSpiceByGroupsAsync()
+  {
+    List<GroupByDrawerIdThenSpiceGroupName>  spicesByDrawers = await _context.Spices
+        .AsNoTracking()
+        .GroupBy(spice => new { spice.DrawerId, spice.SpiceGroup.Name },
+          (key, spices) => new GroupByDrawerIdThenSpiceGroupName(key.DrawerId, key.Name, spices.ToList()))
+        .ToListAsync();
+    
+    return spicesByDrawers;
   }
 
   public async Task DeleteSpiceAsync(Spice spice)

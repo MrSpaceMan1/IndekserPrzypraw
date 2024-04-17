@@ -1,0 +1,12 @@
+.nested-list-body{
+  width: 100%;
+  text-align: center;
+}
+
+.nested-list-header-button{
+  width: 100%;
+}
+.nested-list-header{
+  margin: 0;
+  font-size: inherit;
+}

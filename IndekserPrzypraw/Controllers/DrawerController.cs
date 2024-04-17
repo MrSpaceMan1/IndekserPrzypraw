@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using IndekserPrzypraw.DTO;
@@ -34,19 +35,26 @@ namespace IndekserPrzypraw.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DrawerDTO>>> GetDrawers()
         {
-            IEnumerable<Drawer> drawers = await _drawerRepository.GetAllDrawersAsync();
-            List<DrawerDTO> drawerDtos = _mapper.Map<IEnumerable<Drawer>, List<DrawerDTO>>(drawers);
-            return Ok(drawerDtos);
+            var drawers = await _drawerRepository.GetAllDrawersAsync();
+            
+            List<DrawerDTO> drawersDto = _mapper.Map<IEnumerable<Drawer>, List<DrawerDTO>>(drawers);
+            foreach (var drawerDto in drawersDto)
+            {
+                _logger.LogInformation(JsonSerializer.Serialize(drawerDto));
+            }
+            return Ok(drawersDto);
         }
-
+        
         // GET: api/Drawer/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Drawer>> GetDrawer(int id)
+        public async Task<ActionResult<DrawerDTO>> GetDrawer(int id)
         {
             Drawer? drawer = await _drawerRepository.GetDrawerByIdAsync(id);
             if (drawer is null)
                 return NotFound($"Drawer with id {id} not found");
-            DrawerDTO drawerDto = _mapper.Map<Drawer, DrawerDTO>(drawer);
+
+            var drawerDto = _mapper.Map<Drawer, DrawerDTO>(drawer);
+    
             return Ok(drawerDto);
         }
 

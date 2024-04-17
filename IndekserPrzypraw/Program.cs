@@ -14,7 +14,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<SpicesContext>(options =>
   options
-    .UseLazyLoadingProxies()
     .UseNpgsql(
       builder.Configuration.GetConnectionString("SpicesContext")
     )
@@ -31,7 +30,8 @@ app.UseCors(opt => opt.WithOrigins(
     .Select(pair => pair.Value)
     .Where(v => v is not null)
     .ToArray()
-  ));
+  )
+  .WithHeaders("Content-Type"));
 app.MapGet("/", async context => await context.Response.WriteAsync("OK"));
 
 // Configure the HTTP request pipeline.

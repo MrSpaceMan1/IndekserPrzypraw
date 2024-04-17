@@ -8,7 +8,7 @@ namespace IndekserPrzypraw.Repositories;
 public interface IDrawerRepository
 {
   Task<Drawer?> GetDrawerByIdAsync(int drawerId);
-  Task<IEnumerable<Drawer>> GetAllDrawersAsync();
+  Task<List<Drawer>> GetAllDrawersAsync();
   Task<Drawer> AddDrawerAsync(Drawer drawer);
   Task RemoveDrawerAsync(Drawer drawer);
   Task UpdateDrawerAsync(Drawer drawer);
@@ -25,14 +25,22 @@ public class DrawerRepository : IDrawerRepository
     _context = unitOfWork.Context;
   }
   
-  public async Task<Drawer?> GetDrawerByIdAsync(int drawerId)
+  public Task<Drawer?> GetDrawerByIdAsync(int drawerId)
   {
-    return await _context.Drawers.FindAsync(drawerId);
+    return _context.Drawers
+      .Include(drawer => drawer.Spices)
+      .ThenInclude(spice => spice.SpiceGroup)
+      .Where(drawer => drawer.DrawerId == drawerId)
+      .FirstOrDefaultAsync();
   }
 
-  public async Task<IEnumerable<Drawer>> GetAllDrawersAsync()
+  public Task<List<Drawer>> GetAllDrawersAsync()
   {
-    return await _context.Drawers.AsNoTracking().ToListAsync();
+    return _context.Drawers
+      .AsNoTracking()
+      .Include(drawer => drawer.Spices)
+      .ThenInclude(spice => spice.SpiceGroup)
+      .ToListAsync();
   }
 
   public async Task<Drawer> AddDrawerAsync(Drawer newDrawer)
