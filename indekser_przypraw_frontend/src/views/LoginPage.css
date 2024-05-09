@@ -1,0 +1,25 @@
+#login-container{
+  display: flex;
+  flex-flow: column;
+  justify-content: start;
+  align-items: center;
+  height: 100%;
+}
+
+.login-header{
+  display: grid;
+  width: 100%;
+  background-color: var(--primary-300);
+  height: 6rem;
+  align-content: end;
+  justify-content: center;
+  grid-template-columns: 1fr;
+}
+#login-form{
+  margin-top: 10rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  width: 20rem;
+}

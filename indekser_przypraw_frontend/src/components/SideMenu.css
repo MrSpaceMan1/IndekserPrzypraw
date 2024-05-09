@@ -42,6 +42,9 @@
   z-index: 1;
   position: absolute;
   transition: left ease 1s;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: start;
 }
 
 .menu-open{
@@ -50,8 +53,4 @@
 
 .menu-close{
   left: -100%;
-}
-
-.menu-item{
-  color: var(--secondary-100);
 }

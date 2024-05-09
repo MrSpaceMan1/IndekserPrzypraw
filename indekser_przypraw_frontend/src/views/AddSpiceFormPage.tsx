@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { StoreState } from '@/stores/store.ts'
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useState } from 'react'
 import spiceApi from '@/wretchConfig.ts'
 import { useNavigate } from 'react-router-dom'
-import { addSpiceToDrawer } from '@/stores/SpiceStore.ts'
-import { Spice } from '@/types/Spice.ts'
+import { addSpiceToDrawer } from '@/stores/spiceStore.ts'
+import { Spice } from '@/types'
 
 export default function AddSpiceFormPage() {
   const navigate = useNavigate()
@@ -15,6 +15,7 @@ export default function AddSpiceFormPage() {
   const drawers = useSelector((state: StoreState) => state.spice.drawers)
   const dispatch = useDispatch()
   const [name, setName] = useState<string>(barcodeInfo.name)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [barcode, _] = useState<string>(barcodeInfo.barcode)
   const [grams, setGrams] = useState<number>(barcodeInfo.grams)
   const [expirationDate, setExpirationDate] = useState<string>('')
@@ -22,10 +23,14 @@ export default function AddSpiceFormPage() {
   const [isFetchingData, setIsFetchingData] = useState<boolean>(false)
 
   async function handleSubmit(ev: FormEvent<HTMLFormElement>) {
+    console.log(ev)
     setIsFetchingData(true)
     ev.preventDefault()
     const formData = new FormData(ev.target as HTMLFormElement)
-    const dataJson = Object.fromEntries(formData)
+    const dataJson = Object.fromEntries(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      Array.from(formData).filter(([_, value]) => !!value)
+    )
     spiceApi
       .post(dataJson, 'Spices/drawer/' + drawer)
       .json<Spice>()
@@ -33,29 +38,32 @@ export default function AddSpiceFormPage() {
         dispatch(addSpiceToDrawer({ drawerId: drawer, spice }))
         navigate('/', { relative: 'route' })
       })
+      .catch((err) => {
+        console.log(err)
+        spiceApi
+          .get()
+          .res()
+          .then(() => navigate('/login'))
+      })
       .finally(() => setIsFetchingData(false))
     console.log(dataJson, 'Spices/drawer/' + drawer)
   }
 
-  useEffect(() => {
-    console.log(barcodeInfo)
-  }, [barcodeInfo])
-
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="Barcode">Barcode</label>
+        <label htmlFor="barcode">Barcode</label>
         <input
-          id="Barcode"
-          name="Barcode"
-          value={barcode}
+          id="barcode"
+          name="barcode"
+          defaultValue={barcode}
           required={true}
-          readOnly={true}
+          readOnly={!!barcodeInfo.barcode}
         />
-        <label htmlFor="Name">Name</label>
+        <label htmlFor="name">Name</label>
         <input
-          id="Name"
-          name="Name"
+          id="name"
+          name="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           minLength={3}
@@ -64,8 +72,8 @@ export default function AddSpiceFormPage() {
         />
         <label htmlFor="Grams">Grams</label>
         <input
-          id="Grams"
-          name="Grams"
+          id="grams"
+          name="grams"
           type="number"
           value={grams}
           onChange={(e) => setGrams(parseInt(e.target.value))}
@@ -73,18 +81,18 @@ export default function AddSpiceFormPage() {
           required={true}
           readOnly={!!barcodeInfo.grams}
         />
-        <label htmlFor="ExpirationDate">Expiration Date</label>
+        <label htmlFor="expirationDate">Expiration Date</label>
         <input
-          id="ExpirationDate"
-          name="ExpirationDate"
+          id="expirationDate"
+          name="expirationDate"
           value={expirationDate}
           type="date"
           onChange={(e) => setExpirationDate(e.target.value)}
         />
-        <label htmlFor="Drawer">Drawer</label>
+        <label htmlFor="drawer">Drawer</label>
         <select
-          id="Drawer"
-          name="Drawer"
+          id="drawer"
+          name="drawer"
           value={drawer}
           onChange={(e) => {
             setDrawer(parseInt(e.target.value?.[0]))

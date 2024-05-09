@@ -12,6 +12,5 @@ public class SpicesContext : DbContext
 
   public SpicesContext(DbContextOptions<SpicesContext> options) : base(options)
   {
-    
   }
 }

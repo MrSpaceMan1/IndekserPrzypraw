@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import BarcodeInfo from '@/types/BarcodeInfo.ts'
+import { BarcodeInfo } from '@/types'
 
 export const barcodeScannerStore = createSlice({
   name: 'barcodeScanner',

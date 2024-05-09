@@ -7,4 +7,4 @@ interface Spice {
   drawerId: number
 }
 
-export type { Spice }
+export default Spice

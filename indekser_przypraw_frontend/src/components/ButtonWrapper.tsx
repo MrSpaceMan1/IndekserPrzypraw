@@ -17,7 +17,7 @@ export default function ButtonWrapper({
 }
 
 interface ButtonWrapperProps {
-  children: ReactElement
+  children: ReactElement | ReactElement[]
   onClick: (e: MouseEvent) => void | (() => void)
   additionalClasses?: string[]
 }

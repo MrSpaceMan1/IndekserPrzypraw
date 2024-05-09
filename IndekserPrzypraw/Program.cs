@@ -1,17 +1,26 @@
 using System.Reflection;
+using Castle.Components.DictionaryAdapter.Xml;
 using IndekserPrzypraw.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors();
+builder.Services.AddAuthentication();
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+  .AddEntityFrameworkStores<IdentityContext>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Logging.AddSimpleConsole();
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(opt => opt.AddSecurityDefinition("AspNetCoreIdentity", new OpenApiSecurityScheme()));
+builder.Services.AddDbContext<IdentityContext>(
+  options => options.UseNpgsql(
+    builder.Configuration.GetConnectionString("IdentityContext")
+  ));
 builder.Services.AddDbContext<SpicesContext>(options =>
   options
     .UseNpgsql(
@@ -20,27 +29,26 @@ builder.Services.AddDbContext<SpicesContext>(options =>
 );
 builder.Services.AddControllers();
 builder.Services.AddHttpsRedirection(opt => opt.HttpsPort = 443);
+
 var app = builder.Build();
 
-app.UseCors(opt => opt.WithOrigins(
-  app
-    .Configuration
-    .GetSection("FrontendHost")
-    .AsEnumerable()
-    .Select(pair => pair.Value)
-    .Where(v => v is not null)
-    .ToArray()
-  )
-  .WithHeaders("Content-Type"));
-app.MapGet("/", async context => await context.Response.WriteAsync("OK"));
-
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) {
+if (app.Environment.IsDevelopment())
+{
   app.UseSwagger();
   app.UseSwaggerUI();
 }
 
-app.MapControllers();
+app.UseCors(opt =>
+  opt.WithOrigins(app.Configuration.GetSection("FrontendHost").AsEnumerable().Skip(1).ToList()
+      .Select(pair => pair.Value!).ToArray())
+    .AllowCredentials()
+    .WithHeaders("Content-Type", "User-agent")
+    .WithMethods("DELETE", "POST", "GET", "PUT", "PATCH", "OPTIONS"));
+
+app.MapGet("/api", async context => await context.Response.WriteAsync("OK"));
+app.MapGroup("/api").MapIdentityApi<IdentityUser>();
+app.MapControllers().RequireAuthorization();
 app.UseHttpsRedirection();
 
 app.Run();

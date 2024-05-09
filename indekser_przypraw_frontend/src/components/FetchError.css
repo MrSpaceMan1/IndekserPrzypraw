@@ -1,0 +1,11 @@
+.error-header{
+  font-size: 1.3rem;
+  color: var(--red-500);
+}
+
+.error-list{
+  color: var(--red-500);
+  list-style: none;
+  padding-left: 0.5rem;
+  margin: 0;
+}

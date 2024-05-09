@@ -3,11 +3,8 @@ using System.ComponentModel.DataAnnotations;
 namespace IndekserPrzypraw.DTO;
 
 public record AddSpiceDTO(
-    [Required]
-    string Name,
-    [Required]
-    uint Grams,
-    DateOnly ExpirationDate,
-    [Required]
-    string Barcode
-  );
+  [Required] string Name,
+  [Required] int Grams,
+  DateOnly? ExpirationDate,
+  [Required] string Barcode
+);

@@ -5,3 +5,5 @@ interface ApiError {
   detail: string
   errors: { [key: string]: string[] }
 }
+
+export default ApiError

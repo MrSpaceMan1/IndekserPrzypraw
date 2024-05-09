@@ -4,5 +4,5 @@ public class BarcodeInfoDTO
 {
   public string Barcode { get; set; }
   public string Name { get; set; }
-  public uint Grams { get; set; }
+  public int Grams { get; set; }
 }

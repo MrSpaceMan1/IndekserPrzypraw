@@ -2,11 +2,11 @@ using AutoMapper;
 using IndekserPrzypraw.DTO;
 using IndekserPrzypraw.Exceptions;
 using IndekserPrzypraw.Models;
+using IndekserPrzypraw.Profiles;
+using IndekserPrzypraw.Profiles.Services;
 using IndekserPrzypraw.Repositories;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace IndekserPrzypraw.Profiles.Services;
+namespace IndekserPrzypraw.Services;
 
 public class LocalSpiceService : ISpiceService
 {
@@ -15,14 +15,16 @@ public class LocalSpiceService : ISpiceService
   private UnitOfWork<SpicesContext> _unitOfWork;
   private IMapper _mapper;
   private DrawerRepository _drawerRepository;
+  private ILogger _logger;
 
-  public LocalSpiceService(UnitOfWork<SpicesContext> unitOfWork, IMapper mapper)
+  public LocalSpiceService(UnitOfWork<SpicesContext> unitOfWork, IMapper mapper, ILogger logger)
   {
     _unitOfWork = unitOfWork;
     _spiceGroupRepository = new SpiceGroupRepository(_unitOfWork);
     _spiceRepository = new SpiceRepository(_unitOfWork);
     _drawerRepository = new DrawerRepository(_unitOfWork);
     _mapper = mapper;
+    _logger = logger;
   }
 
   public async Task<BarcodeInfoDTO?> GetSpiceByBarcodeAsync(string barcode)
@@ -52,16 +54,24 @@ public class LocalSpiceService : ISpiceService
       await _unitOfWork.Rollback();
       throw new NotFoundException(x => x.AddModelError(nameof(drawerId), $"Drawer with {drawerId} doesn't exist"));
     }
-    SpiceGroup? spiceGroup = await _spiceGroupRepository.GetSpiceGroupByNameAsync(addSpiceDto.Name);
+
+    SpiceGroup? spiceGroup = await _spiceGroupRepository.GetSpiceGroupByNameAsync(addSpiceDto.Name, drawerId);
     if (spiceGroup is null)
     {
-      spiceGroup = await _spiceGroupRepository.AddSpiceGroupAsync(addSpiceDto.Name, addSpiceDto.Barcode, addSpiceDto.Grams, null, null);
+      spiceGroup = await _spiceGroupRepository.AddSpiceGroupAsync(
+        addSpiceDto.Name,
+        addSpiceDto.Barcode,
+        addSpiceDto.Grams,
+        drawerId,
+        null,
+        null
+      );
     }
+
     Spice spice = await _spiceRepository.AddSpiceAsync(new Spice
     {
       SpiceGroupId = spiceGroup.SpiceGroupId,
-      DrawerId = drawer.DrawerId,
-      ExpirationDate = addSpiceDto.ExpirationDate,
+      ExpirationDate = addSpiceDto.ExpirationDate ?? null,
     });
     await _unitOfWork.Commit();
 
@@ -77,7 +87,8 @@ public class LocalSpiceService : ISpiceService
   public async Task RemoveSpiceAsync(int spiceId)
   {
     Spice? spice = await _spiceRepository.GetSpiceByIdAsync(spiceId);
-    if (spice is null) throw new NotFoundException(x => x.AddModelError(nameof(spice), $"Spice with id {spiceId} not found"));
+    if (spice is null)
+      throw new NotFoundException(x => x.AddModelError(nameof(spice), $"Spice with id {spiceId} not found"));
     await _unitOfWork.BeginTransaction();
     await _spiceRepository.DeleteSpiceAsync(spice);
     await _unitOfWork.Commit();
@@ -88,5 +99,67 @@ public class LocalSpiceService : ISpiceService
     var groups = await _spiceRepository.GetSpiceByGroupsAsync(1);
     Console.WriteLine(groups.ToString());
     return groups;
+  }
+
+  public async Task RemoveSpiceGroupWithSpices(int spiceGroupId)
+  {
+    var spiceGroup = await _spiceGroupRepository.GetSpiceGroupByIdAsync(spiceGroupId);
+    if (spiceGroup is null)
+      throw new NotFoundException(x =>
+        x.AddModelError($"{nameof(spiceGroupId)}", $"Spice group with provided id doesn't exist"));
+    await _unitOfWork.BeginTransaction();
+    foreach (var spice in spiceGroup.Spices)
+    {
+      await RemoveSpiceAsync(spice.SpiceId);
+    }
+
+    await _spiceGroupRepository.RemoveSpiceGroupAsync(spiceGroupId);
+    await _unitOfWork.Commit();
+  }
+
+  public async Task<SpiceGroupDTO> UpdateSpiceGroup(int spiceGroupId, UpdateSpiceGroupDTO updateSpiceGroupDto)
+  {
+    var spiceGroup = await _spiceGroupRepository.GetSpiceGroupByIdAsync(spiceGroupId);
+    if (spiceGroup is null)
+      throw new NotFoundException(x =>
+        x.AddModelError(nameof(spiceGroupId), $"Spice group with id {spiceGroupId} doesn't exist"));
+
+    var updatedSpiceGroup = _mapper.Map(updateSpiceGroupDto, spiceGroup);
+    await _unitOfWork.BeginTransaction();
+    updatedSpiceGroup = await _spiceGroupRepository.UpdateSpiceGroupAsync(updatedSpiceGroup);
+    await _unitOfWork.Commit();
+    return _mapper.Map<SpiceGroupDTO>(updatedSpiceGroup);
+  }
+
+  public async Task<MissingSpicesDTO> GetMissingSpices()
+  {
+    var missingSpices = new Dictionary<string, ICollection<MissingSpiceGroupDTO>>();
+    var drawers = await _drawerRepository.GetAllDrawersAsync();
+    foreach (var drawer in drawers)
+    {
+      var missingSpiceGroupsInDrawer = new List<MissingSpiceGroupDTO>();
+      foreach (var spiceGroup in drawer.SpiceGroups)
+      {
+        var grams = spiceGroup.Spices.Aggregate(0, (acc, spice) => acc + spice.SpiceGroup.Grams,
+          u => u);
+        var count = spiceGroup.Spices.Count;
+        if ((spiceGroup.MinimumCount ?? 0) > count || (spiceGroup.MinimumGrams ?? 0) > grams)
+          missingSpiceGroupsInDrawer.Add(new MissingSpiceGroupDTO
+          {
+            Name = spiceGroup.Name,
+            SpiceGroupId = spiceGroup.SpiceGroupId,
+            MissingGrams = Math.Clamp((spiceGroup.MinimumGrams ?? 0) - grams, 0, Int32.MaxValue),
+            MissingCount = Math.Clamp((spiceGroup.MinimumCount ?? 0) - count, 0, Int32.MaxValue)
+          });
+      }
+
+      if (missingSpiceGroupsInDrawer.Count > 0)
+        missingSpices.Add(drawer.Name, missingSpiceGroupsInDrawer);
+    }
+
+    return new MissingSpicesDTO
+    {
+      MissingSpices = missingSpices
+    };
   }
 }

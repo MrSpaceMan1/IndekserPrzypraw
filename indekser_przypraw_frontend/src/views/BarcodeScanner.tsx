@@ -11,7 +11,12 @@ import {
 } from '@/stores/barcodeScannerStore.ts'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { useTouch } from '@/components/TouchRegionContext.tsx'
+import { checkEan13Validity, checkEan8Validity } from '@/eanValidators.ts'
+
+const codeToValidator: { [key: string]: (arg0: string) => boolean } = {
+  ean_8: checkEan8Validity,
+  ean_13: checkEan13Validity,
+}
 
 export default function BarcodeScanner() {
   const dispatch = useDispatch()
@@ -54,23 +59,6 @@ export default function BarcodeScanner() {
     }
   }
 
-  function checkEan13Validity(barcode: string): boolean {
-    const evenNumbers: number[] = []
-    const oddNumbers: number[] = []
-    for (let i = 1; i < 13; i += 2) {
-      evenNumbers.push(parseInt(barcode[i]))
-    }
-    for (let i = 0; i < 12; i += 2) {
-      oddNumbers.push(parseInt(barcode[i]))
-    }
-    const sum =
-      (evenNumbers.reduce((acc, cur) => acc + cur, 0) * 3 +
-        oddNumbers.reduce((acc, cur) => acc + cur, 0)) %
-      10
-    const digit = sum === 0 ? 0 : 10 - sum
-    return parseInt(barcode[12]) === digit
-  }
-
   function getMedian(arr: number[]) {
     const newArr = [...arr] // copy the array before sorting, otherwise it mutates the array passed in, which is generally undesireable
     newArr.sort((a, b) => a - b)
@@ -91,9 +79,14 @@ export default function BarcodeScanner() {
   }
 
   async function handleDetected(result: QuaggaJSResultObject) {
+    console.log(result.codeResult.format)
     if (isFetchingBarcodeInfo.current) return
     const err = getMedianOfCodeErrors(result.codeResult.decodedCodes)
-    if (err < 0.25 && checkEan13Validity(result.codeResult.code!)) {
+
+    if (
+      err < 0.25 &&
+      codeToValidator[result.codeResult.format](result.codeResult.code!)
+    ) {
       isFetchingBarcodeInfo.current = true
       spiceApi
         .get(`Spices/barcode/${result.codeResult.code}`)
@@ -161,7 +154,7 @@ export default function BarcodeScanner() {
       },
       frequency: 15,
       decoder: {
-        readers: ['ean_reader'],
+        readers: ['ean_reader', 'ean_8_reader'],
       },
     })
       .then(() => {

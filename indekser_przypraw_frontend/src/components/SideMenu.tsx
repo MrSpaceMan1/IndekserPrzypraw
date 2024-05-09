@@ -1,6 +1,6 @@
 import './SideMenu.css'
 import { join } from '@/utils.ts'
-import { ReactElement, Ref } from 'react'
+import { ReactNode, Ref } from 'react'
 export default function SideMenu({
   isOpen,
   closeMenu,
@@ -29,5 +29,5 @@ interface SideMenuProps {
   isOpen: boolean
   backdropRef: Ref<HTMLDivElement>
   closeMenu: () => void
-  children?: ReactElement | ReactElement[]
+  children?: ReactNode | ReactNode[]
 }

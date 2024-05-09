@@ -10,6 +10,7 @@
   -moz-osx-font-smoothing: grayscale;
 
   --primary-base: #5DA0BB;
+  --primary-050: #f8f9f9;
   --primary-100: #D1E9F7;
   --primary-200: #76C8EA;
   --primary-300: #5DA0BB;
@@ -38,7 +39,9 @@
   --tertiary-700: #0D2520;
 
   --red-base: #E87F7F;
+  --red-300: #f14343;
   --red-500: #F21313;
+
 
   background-color: var(--secondary-100);
   color: var(--secondary-700);
@@ -71,6 +74,27 @@ html, body {
   font-style: normal;
 }
 
+.montserrat-normal {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight:300;
+  font-style: normal;
+}
+
+.montserrat-bold {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.montserrat-very-bold {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+}
+
 .ReactCollapse--collapse {
   transition: height 500ms;
 }
@@ -90,6 +114,34 @@ html, body {
   cursor: pointer;
 }
 
+.p-1{
+  padding: 1rem;
+}
+
+.p-y-1{
+  padding: 1rem 0;
+}
+
+.p-x-1{
+  padding: 0 1rem;
+}
+
+input{
+  background-color: var(--secondary-100);
+  padding: 0.3rem;
+  margin: 0.3rem;
+  border: unset;
+  color: var(--secondary-700);
+  border-bottom: 2px solid var(--primary-400);
+  border-radius: 3px;
+}
+input:disabled{
+  background-color: var(--secondary-200);
+  color: var(--primary-600);
+  cursor: not-allowed;
+  padding: 0.3rem;
+}
+
 .no-list-styling{
   list-style: none;
   margin: unset;
@@ -102,4 +154,8 @@ html, body {
 
 .max-width{
   width: 100%;
+}
+
+.underline{
+  text-decoration-line: underline;
 }

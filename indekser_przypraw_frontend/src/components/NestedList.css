@@ -10,3 +10,26 @@
   margin: 0;
   font-size: inherit;
 }
+
+.menu-header-button{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0 0.5rem;
+}
+
+.menu-header-icon{
+  transition: transform 0.5s ease;
+}
+
+.menu-header-icon-invert{
+  filter: invert(100%) drop-shadow(0 0 1px var(--secondary-700));
+}
+.menu-header-icon-rotate{
+  transform: rotate3d(1, 0, 0, 180deg);;
+}
+.is-under{
+  background-color: var(--red-300);
+  color: var(--primary-050);
+  text-shadow: var(--secondary-700) 0 0 1px;
+}

@@ -1,30 +1,32 @@
 import { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { ButtonWrapper, NestedList, SideMenu } from '@/components'
+import { ButtonWrapper, SideMenu, SpiceList } from '@/components'
 import { StoreState } from '@/stores/store.ts'
-import { useEffectOnce } from '@/hooks/UseEffectOnce.ts'
-import { useTouch } from '@/components/TouchRegionContext.tsx'
 import hamburgerMenuSvg from '@/assets/hamburger_menu.svg'
 import gearSvg from '@/assets/gear.svg'
 import addNewSvg from '@/assets/add_new.svg'
-import crossSvg from '@/assets/cross.svg'
+import funnelSvg from '@/assets/funnel.svg'
 import './MainPage.css'
-import { setDebugMessage } from '@/stores/debugStore.ts'
 import { useNavigate } from 'react-router-dom'
 import '../components/NestedListItem.css'
 import '../components/NestedList.css'
-import { addSpiceToDrawer } from '@/stores/SpiceStore.ts'
+import { Tooltip } from 'react-tooltip'
+import { setSelected } from '@/stores/spiceStore.ts'
+import filteredSpiceList from '@/components/SpiceListFiltered.ts'
+import shoppingListSvf from '@/assets/shopping-list.svg'
 
 export default function MainPage() {
-  const touch = useTouch()
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const drawers = useSelector((store: StoreState) => store.spice.drawers)
+  const selected = useSelector(
+    (store: StoreState) => store.spice.selectedDrawer
+  )
 
-  const [drawerIndex, setDrawerIndex] = useState<number>(0)
+  const [filterString, setFilterString] = useState<string>('')
   const [sideMenuOpen, setSideMenuOpen] = useState(false)
-  const drawer = drawers[drawerIndex]
+  const drawer = drawers[selected]
 
   const isSideMenuOpen = useRef(false)
   const sideMenuBackdropRef = useRef<HTMLDivElement>(null)
@@ -39,22 +41,6 @@ export default function MainPage() {
     isSideMenuOpen.current = false
   }
 
-  const swipeHandler = (ev: HammerInput) => {
-    dispatch(setDebugMessage(ev.direction === 4 ? 'right-swipe' : 'left-swipe'))
-    if (ev.direction === 4) return openSideMenu()
-    if (ev.direction === 2 && isSideMenuOpen.current) {
-      return closeSideMenu()
-    }
-    return navigate('/barcode-scanner')
-  }
-
-  useEffectOnce(() => {
-    touch.addListener('swipe', swipeHandler)
-    return () => {
-      touch.removeListener('swipe', swipeHandler)
-    }
-  })
-
   if (!drawers) return <div>Loading</div>
   return (
     <div id="main-page">
@@ -63,65 +49,99 @@ export default function MainPage() {
         closeMenu={closeSideMenu}
         backdropRef={sideMenuBackdropRef}
       >
-        {drawers.map((drawer, index) => (
+        {drawers?.map((drawer, index) => (
           <button
-            className="menu-item"
+            key={drawer.drawerId}
+            className="menu-item unset"
             onClick={() => {
-              setDrawerIndex(index)
+              dispatch(setSelected(index))
               closeSideMenu()
             }}
           >
             {drawer.name}
           </button>
         ))}
+        <button
+          className="menu-item unset"
+          onClick={() => navigate('/add-drawer')}
+        >
+          +
+        </button>
       </SideMenu>
 
       <header className="header">
-        <ButtonWrapper onClick={openSideMenu}>
-          <img src={hamburgerMenuSvg} className="header-icon" />
+        <ButtonWrapper
+          onClick={openSideMenu}
+          additionalClasses={['header-item-height']}
+        >
+          <img
+            src={hamburgerMenuSvg}
+            className="header-icon"
+            alt="Show drawers icon"
+          />
         </ButtonWrapper>
-        <h1 className="jetbrains-mono-normal no-text-wrap max-width header-title ">
-          {drawer?.name ?? 'Drawer'}
-        </h1>
-        <ButtonWrapper onClick={() => {}}>
-          <img src={gearSvg} className="header-icon black-icon-filter" />
+        <Tooltip id="drawer-name" />
+        <ButtonWrapper
+          onClick={() => navigate('/drawer/' + drawer.drawerId + '/settings')}
+          additionalClasses={['header-item-height']}
+        >
+          <h1
+            className="jetbrains-mono-normal no-text-wrap max-width header-title underline"
+            data-tooltip-id="drawer-name"
+            data-tooltip-content={drawer?.name}
+            data-tooltip-place="top"
+          >
+            {drawer?.name ?? 'Drawer'}
+          </h1>
+        </ButtonWrapper>
+        <ButtonWrapper
+          onClick={() => {}}
+          additionalClasses={['header-item-height']}
+        >
+          <img
+            src={gearSvg}
+            className="header-icon black-icon-filter"
+            alt="Drawer settings icon"
+          />
         </ButtonWrapper>
       </header>
+      <div>
+        <span className="filter-bar-row">
+          <img src={funnelSvg} className="filter-bar-icon" alt="Filter icon" />
+          <input
+            type="text"
+            value={filterString}
+            onChange={(e) => setFilterString(e.target.value)}
+            placeholder="filter"
+          />
+        </span>
+      </div>
       <div id="main-content">
         {drawer &&
-          drawer.spices.map((spiceGroup) => (
-            <NestedList label={<h2>{spiceGroup.name}</h2>}>
-              <table className={'nested-list-body'}>
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Data ważności</th>
-                    <th>Waga</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {spiceGroup.spices.map((spice, index) => (
-                    <tr key={spice.spiceId}>
-                      <td>{index + 1}</td>
-                      <td>{spice.expirationDate}</td>
-                      <td>{spice.grams}g</td>
-                      <td>
-                        <button className={'unset'}>
-                          <img src={crossSvg} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </NestedList>
+          (
+            (filterString
+              ? filteredSpiceList(drawer.spices, filterString)
+              : drawer.spices) ?? []
+          ).map((spiceGroup) => (
+            <SpiceList key={spiceGroup.spiceGroupId} spiceGroup={spiceGroup} />
           ))}
       </div>
       <div id="action-bar">
-        <ButtonWrapper onClick={() => {}}>
-          <img src={addNewSvg} />
+        <ButtonWrapper
+          onClick={() => {
+            navigate('/shopping-list')
+          }}
+        >
+          <img
+            src={shoppingListSvf}
+            className="header-icon black-icon-filter"
+            alt="view shopping list"
+          />
         </ButtonWrapper>
+        <ButtonWrapper onClick={() => navigate('/barcode-scanner')}>
+          <img src={addNewSvg} alt="Add new" />
+        </ButtonWrapper>
+        <span className="header-icon"></span>
       </div>
     </div>
   )

@@ -16,9 +16,14 @@
   grid-template-columns: 20% 60% 20%;
 }
 
+.header-item-height{
+  height: 50px;
+}
+
 .header-title {
   margin: 0;
   font-size: 34px;
+  line-height: 1.2;
   letter-spacing: -0.8px;
   text-transform: uppercase;
   text-align: center;
@@ -45,9 +50,11 @@
 #action-bar {
   position: fixed;
   display: flex;
-  justify-content: center;
+  left: 0;
+  padding: 0 1rem;
+  justify-content: space-between;
   bottom: 0;
-  width: 100%;
+  width: calc(100% - 2rem);
   max-width: 1280px;
   height: 4rem;
   background-color: var(--primary-300);
@@ -55,10 +62,28 @@
 
 .menu-item {
   margin: 0;
-  margin-left: 0.5rem;
+  padding-left: 0.5rem;
   font-weight: 500;
-  font-size: 34px;
+  font-size: 2.5rem;
   letter-spacing: -0.8px;
   text-transform: uppercase;
   color: var(--secondary-100);
+  border-bottom: 1px solid var(--primary-600);
+  width: 100%;
+  text-align: start;
+}
+
+.menu-item:last-child{
+  text-align: center;
+  border-bottom: none;
+}
+
+.filter-bar-row{
+  width: min-content;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+.filter-bar-icon{
+  height: 1.5rem;
 }

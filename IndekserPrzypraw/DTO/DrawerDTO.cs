@@ -4,14 +4,10 @@ public class DrawerDTO
 {
   public int DrawerId { get; set; }
   public string Name { get; set; }
-  public List<SpiceGroupDTO> Spices { get; set; }
+  public List<SpiceGroupDTO> Spices { get; set; } = [];
 
-  public DrawerDTO(int drawerId,
-    string name,
-    List<SpiceGroupDTO> spices)
+  public override string ToString()
   {
-    DrawerId = drawerId;
-    Name = name;
-    Spices = spices;
+    return $"{nameof(DrawerId)}: {DrawerId}, {nameof(Name)}: {Name}, {nameof(Spices)}: {Spices}";
   }
 }

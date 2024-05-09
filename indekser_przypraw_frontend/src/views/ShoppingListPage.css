@@ -1,0 +1,35 @@
+.shopping-list-header {
+  display: grid;
+  width: 100%;
+  background-color: var(--primary-300);
+  height: 6rem;
+  align-content: end;
+  justify-content: space-between;
+  grid-template-columns: 20% 60% 20%;
+}
+
+.drawerSection{
+  margin-bottom: 3rem;
+  margin-left: 0.5rem;
+}
+
+.drawerTitle{
+  text-transform: capitalize;
+  margin: 0 0 0.5rem 0;
+}
+
+.spiceGroupTitle{
+  margin: 0;
+}
+
+.missingRow{
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  padding-right: 1rem;
+}
+
+#shopping-list-section{
+  height: calc(100% - 6rem);
+  overflow: scroll;
+}

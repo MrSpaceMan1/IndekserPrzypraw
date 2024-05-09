@@ -28,8 +28,8 @@ public class DrawerRepository : IDrawerRepository
   public Task<Drawer?> GetDrawerByIdAsync(int drawerId)
   {
     return _context.Drawers
-      .Include(drawer => drawer.Spices)
-      .ThenInclude(spice => spice.SpiceGroup)
+      .Include(drawer => drawer.SpiceGroups)
+      .ThenInclude(spiceGroup => spiceGroup.Spices)
       .Where(drawer => drawer.DrawerId == drawerId)
       .FirstOrDefaultAsync();
   }
@@ -38,8 +38,8 @@ public class DrawerRepository : IDrawerRepository
   {
     return _context.Drawers
       .AsNoTracking()
-      .Include(drawer => drawer.Spices)
-      .ThenInclude(spice => spice.SpiceGroup)
+      .Include(drawer => drawer.SpiceGroups)
+      .ThenInclude(spice => spice.Spices)
       .ToListAsync();
   }
 

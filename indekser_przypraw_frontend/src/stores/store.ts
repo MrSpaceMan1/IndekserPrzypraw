@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { debugStore } from '@/stores/debugStore.ts'
 import { barcodeScannerStore } from '@/stores/barcodeScannerStore.ts'
-import { SpiceStore } from '@/stores/SpiceStore.ts'
+import { SpiceStore } from '@/stores/spiceStore.ts'
 
 export const store = configureStore({
   reducer: {

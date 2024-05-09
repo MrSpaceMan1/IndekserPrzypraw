@@ -1,11 +1,17 @@
 namespace IndekserPrzypraw.DTO;
 
-public record SpiceDTO(
-  int SpiceId,
-  string Name,
-  DateOnly ExpirationDate, 
-  uint Grams,
-  int SpiceGroupId, 
-  int DrawerId,
-  string Barcode
-  );
+public class SpiceDTO
+{
+  public int SpiceId { get; set; }
+  public string Name { get; set; }
+  public DateOnly? ExpirationDate { get; set; }
+  public int Grams { get; set; }
+  public int SpiceGroupId { get; set; }
+  public string Barcode { get; set; }
+
+  public override string ToString()
+  {
+    return $"SpiceDTO({nameof(SpiceId)}: {SpiceId}, {nameof(Name)}: {Name}, {nameof(ExpirationDate)}: {ExpirationDate},"
+           + $" {nameof(Grams)}: {Grams}, {nameof(SpiceGroupId)}: {SpiceGroupId}, {nameof(Barcode)}: {Barcode}";
+  }
+};

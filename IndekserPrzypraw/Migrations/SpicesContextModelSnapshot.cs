@@ -17,10 +17,7 @@ namespace IndekserPrzypraw.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
-                .HasAnnotation("Proxies:ChangeTracking", false)
-                .HasAnnotation("Proxies:CheckEquality", false)
-                .HasAnnotation("Proxies:LazyLoading", true)
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -50,18 +47,13 @@ namespace IndekserPrzypraw.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SpiceId"));
 
-                    b.Property<int>("DrawerId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateOnly>("ExpirationDate")
+                    b.Property<DateOnly?>("ExpirationDate")
                         .HasColumnType("date");
 
                     b.Property<int>("SpiceGroupId")
                         .HasColumnType("integer");
 
                     b.HasKey("SpiceId");
-
-                    b.HasIndex("DrawerId");
 
                     b.HasIndex("SpiceGroupId");
 
@@ -80,14 +72,17 @@ namespace IndekserPrzypraw.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long>("Grams")
-                        .HasColumnType("bigint");
+                    b.Property<int>("DrawerId")
+                        .HasColumnType("integer");
 
-                    b.Property<long?>("MinimumCount")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Grams")
+                        .HasColumnType("integer");
 
-                    b.Property<long?>("MinimumGrams")
-                        .HasColumnType("bigint");
+                    b.Property<int?>("MinimumCount")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("MinimumGrams")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -95,29 +90,39 @@ namespace IndekserPrzypraw.Migrations
 
                     b.HasKey("SpiceGroupId");
 
+                    b.HasIndex("DrawerId");
+
                     b.ToTable("SpiceGroups");
                 });
 
             modelBuilder.Entity("IndekserPrzypraw.Models.Spice", b =>
                 {
-                    b.HasOne("IndekserPrzypraw.Models.Drawer", "Drawer")
-                        .WithMany("Spices")
-                        .HasForeignKey("DrawerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("IndekserPrzypraw.Models.SpiceGroup", "SpiceGroup")
-                        .WithMany()
+                        .WithMany("Spices")
                         .HasForeignKey("SpiceGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Drawer");
-
                     b.Navigation("SpiceGroup");
                 });
 
+            modelBuilder.Entity("IndekserPrzypraw.Models.SpiceGroup", b =>
+                {
+                    b.HasOne("IndekserPrzypraw.Models.Drawer", "Drawer")
+                        .WithMany("SpiceGroups")
+                        .HasForeignKey("DrawerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Drawer");
+                });
+
             modelBuilder.Entity("IndekserPrzypraw.Models.Drawer", b =>
+                {
+                    b.Navigation("SpiceGroups");
+                });
+
+            modelBuilder.Entity("IndekserPrzypraw.Models.SpiceGroup", b =>
                 {
                     b.Navigation("Spices");
                 });

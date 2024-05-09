@@ -12,5 +12,8 @@ public interface ISpiceService
   Task<IEnumerable<SpiceDTO>> GetSpicesInDrawerAsync(int drawerId);
   Task RemoveSpiceAsync(int spiceId);
 
-  Task<Dictionary<string, List<Spice>>>GetSpiceGroups();
+  Task<Dictionary<string, List<Spice>>> GetSpiceGroups();
+  Task RemoveSpiceGroupWithSpices(int spiceGroupId);
+  Task<SpiceGroupDTO> UpdateSpiceGroup(int spiceGroupId, UpdateSpiceGroupDTO updateSpiceGroupDto);
+  Task<MissingSpicesDTO> GetMissingSpices();
 }

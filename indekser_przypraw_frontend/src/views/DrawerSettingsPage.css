@@ -1,0 +1,27 @@
+.form-row{
+  display: grid;
+  grid-template-columns: max-content 5rem;
+  align-items: center;
+}
+.full-height-button{
+  height: 100%;
+}
+
+.go-back-img{
+  height: 17px;
+  transform: rotate(90deg);
+  filter: invert(100%);
+}
+
+div#settings{
+  margin-left: 0.5rem;
+}
+
+#drawer-settings{
+  height: 100%;
+}
+
+#settings{
+  height: calc(100% - 8rem);
+  overflow: scroll;
+}
