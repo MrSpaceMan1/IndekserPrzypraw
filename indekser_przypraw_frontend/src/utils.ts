@@ -1,8 +1,9 @@
 import { ReactElement } from 'react'
 
-export function join(joinString: string, ...strings: string[]) {
+export function join(joinString: string, ...strings: (string | undefined)[]) {
   let joined = ''
   for (const str of strings) {
+    if (!str) continue
     joined += `${str}${joinString}`
   }
   return joined.slice(0, -1)

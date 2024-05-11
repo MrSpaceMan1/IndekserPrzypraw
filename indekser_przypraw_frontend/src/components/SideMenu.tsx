@@ -7,16 +7,16 @@ export default function SideMenu({
   children,
   backdropRef,
 }: SideMenuProps) {
-  const isOpenBackdropClass = isOpen ? 'backdrop-open' : ''
   const isOpenMenuClass = isOpen ? 'menu-open' : 'menu-close'
   return (
     <>
       <div
         ref={backdropRef}
-        className={join(' ', 'backdrop', isOpenBackdropClass)}
+        className={join(' ', 'backdrop', isOpen ? 'backdrop-open' : undefined)}
         onClick={(e) => {
           if (!(e.target as HTMLDivElement).classList.contains('backdrop'))
             return
+          isOpen = false
           closeMenu()
         }}
       />

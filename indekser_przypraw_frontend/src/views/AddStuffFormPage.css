@@ -1,0 +1,6 @@
+.addStuffForm{
+  display: flex;
+  flex-flow: column nowrap;
+  width: 20rem;
+  margin: 0 auto;
+}

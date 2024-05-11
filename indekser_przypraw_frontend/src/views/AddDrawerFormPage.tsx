@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom'
 import { addDrawer } from '@/stores/spiceStore.ts'
 import { ApiError, Drawer } from '@/types'
 import FetchError from '@/components/FetchError.tsx'
+import './AddStuffFormPage.css'
+import DropdownSvg from '@/assets/dropdown.svg'
+import { ButtonWrapper } from '@/components'
 
 export default function AddDrawerFormPage() {
   const navigate = useNavigate()
@@ -35,7 +38,18 @@ export default function AddDrawerFormPage() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <div className="header">
+        <ButtonWrapper
+          onClick={() => navigate(-1)}
+          additionalClasses={['full-height-button', 'header-item-height']}
+        >
+          <img className="go-back-img" src={DropdownSvg} alt="go back button" />
+        </ButtonWrapper>
+        <h1 className="full-width header-title jetbrains-mono-normal">
+          ADD DRAWER
+        </h1>
+      </div>
+      <form className="addStuffForm" onSubmit={handleSubmit}>
         <label htmlFor="name">Drawer name</label>
         <input
           id="name"

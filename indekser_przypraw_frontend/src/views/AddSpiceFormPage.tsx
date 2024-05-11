@@ -5,6 +5,9 @@ import spiceApi from '@/wretchConfig.ts'
 import { useNavigate } from 'react-router-dom'
 import { addSpiceToDrawer } from '@/stores/spiceStore.ts'
 import { Spice } from '@/types'
+import { ButtonWrapper } from '@/components'
+import DropdownSvg from '@/assets/dropdown.svg'
+import './AddStuffFormPage.css'
 
 export default function AddSpiceFormPage() {
   const navigate = useNavigate()
@@ -51,7 +54,18 @@ export default function AddSpiceFormPage() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <div className="header">
+        <ButtonWrapper
+          onClick={() => navigate(-1)}
+          additionalClasses={['full-height-button', 'header-item-height']}
+        >
+          <img className="go-back-img" src={DropdownSvg} alt="go back button" />
+        </ButtonWrapper>
+        <h1 className="full-width header-title jetbrains-mono-normal">
+          ADD DRAWER
+        </h1>
+      </div>
+      <form className="addStuffForm" onSubmit={handleSubmit}>
         <label htmlFor="barcode">Barcode</label>
         <input
           id="barcode"

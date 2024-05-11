@@ -9,6 +9,7 @@ public class SpicesContext : DbContext
   public DbSet<Drawer> Drawers { get; set; }
   public DbSet<Spice> Spices { get; set; }
   public DbSet<SpiceGroup> SpiceGroups { get; set; }
+  public DbSet<SpiceMixRecipe> SpiceMixRecipes { get; set; }
 
   public SpicesContext(DbContextOptions<SpicesContext> options) : base(options)
   {

@@ -62,24 +62,6 @@ export default function ShoppingListPage() {
             )}
           </div>
         ))}
-        {new Array(3).fill(0).map((_, index) => (
-          <div key={index} className="drawerSection montserrat-normal">
-            <h2 className={'drawerTitle'}>Test {index}</h2>
-            {new Array(10).fill(0).map((_, index) => (
-              <div key={index}>
-                <h3 className="spiceGroupTitle">Test przyprawa {index}</h3>
-                <div className="missingRow">
-                  <span>Grams needed: </span>
-                  <span className="montserrat-bold">{index}g</span>
-                </div>
-                <div className="missingRow">
-                  <span>Packages needed: </span>
-                  <span className="montserrat-bold">{index} psc.</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        ))}
       </div>
     </div>
   )

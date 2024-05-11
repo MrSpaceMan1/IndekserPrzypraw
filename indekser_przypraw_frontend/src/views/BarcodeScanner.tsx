@@ -12,6 +12,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { checkEan13Validity, checkEan8Validity } from '@/eanValidators.ts'
+import { ButtonWrapper } from '@/components'
 
 const codeToValidator: { [key: string]: (arg0: string) => boolean } = {
   ean_8: checkEan8Validity,
@@ -188,6 +189,12 @@ export default function BarcodeScanner() {
         ))}
       </select>
       <div ref={outputRef} className="cameraFeed"></div>
+      <ButtonWrapper
+        onClick={() => navigate('/add-spice')}
+        additionalClasses={['skip-button', 'jetbrains-mono-normal']}
+      >
+        Skip -&gt;
+      </ButtonWrapper>
     </div>
   )
 }

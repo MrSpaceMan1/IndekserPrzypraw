@@ -1,4 +1,4 @@
-import { ReactElement, MouseEvent } from 'react'
+import { ReactElement, MouseEvent, ReactNode } from 'react'
 import { join } from '@/utils.ts'
 
 export default function ButtonWrapper({
@@ -17,7 +17,7 @@ export default function ButtonWrapper({
 }
 
 interface ButtonWrapperProps {
-  children: ReactElement | ReactElement[]
+  children?: ReactNode | ReactNode[]
   onClick: (e: MouseEvent) => void | (() => void)
   additionalClasses?: string[]
 }
