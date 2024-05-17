@@ -1,0 +1,21 @@
+@startuml
+class DrawerController {
+    + DrawerController(context:SpicesContext, mapper:IMapper, logger:ILogger<DrawerController>)
+    + <<async>> GetDrawers() : Task<ActionResult<IEnumerable<DrawerDTO>>>
+    + <<async>> GetDrawer(id:int) : Task<ActionResult<DrawerDTO>>
+    + <<async>> PutDrawer(id:int, updateDrawerDto:AddDrawerDTO) : Task<IActionResult>
+    + <<async>> PostDrawer(addDrawerDto:AddDrawerDTO) : Task<ActionResult<DrawerDTO>>
+    + <<async>> DeleteDrawer(id:int) : Task<IActionResult>
+    + <<async>> MoveDrawer(from:int, to:int) : Task<IActionResult>
+}
+class "UnitOfWork`1"<T> {
+}
+class "ILogger`1"<T> {
+}
+ControllerBase <|-- DrawerController
+DrawerController --> "_unitOfWork<SpicesContext>" "UnitOfWork`1"
+DrawerController --> "_drawerRepository" DrawerRepository
+DrawerController --> "_spiceRepository" SpiceRepository
+DrawerController --> "_mapper" IMapper
+DrawerController --> "_logger<DrawerController>" "ILogger`1"
+@enduml

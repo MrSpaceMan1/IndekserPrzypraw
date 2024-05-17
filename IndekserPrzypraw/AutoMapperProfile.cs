@@ -26,7 +26,8 @@ public class AutoMapperProfile
         .ForAllMembers(opt => opt.Condition((dto, group, value) => value is not null));
       CreateMap<SpiceMixRecipe, SpiceMixDTO>();
       CreateMap<Ingredient, IngredientDTO>()
-        .ForMember(src => src.Name, opt => opt.MapFrom(src => src.SpiceGroup.Name));
+        .ReverseMap();
+      CreateMap<AddIngredientDTO, Ingredient>();
     }
   }
 }

@@ -1,0 +1,11 @@
+@startuml
+interface ISpiceService {
+    GetSpiceByBarcodeAsync(barcode:string) : Task<BarcodeInfoDTO?>
+    GetAllSpicesAsync() : Task<IEnumerable<SpiceDTO>>
+    GetSpiceAsync(id:int) : Task<SpiceDTO?>
+    AddSpiceAsync(drawerId:int, addSpiceDto:AddSpiceDTO) : Task<SpiceDTO>
+    GetSpicesInDrawerAsync(drawerId:int) : Task<IEnumerable<SpiceDTO>>
+    RemoveSpiceAsync(spiceId:int) : Task
+    GetSpiceGroups() : Task<Dictionary<string, List<Spice>>>
+}
+@enduml

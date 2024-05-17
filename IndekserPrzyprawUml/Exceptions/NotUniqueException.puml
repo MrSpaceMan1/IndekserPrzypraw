@@ -1,0 +1,7 @@
+@startuml
+class NotUniqueException {
+}
+class "Action`1"<T> {
+}
+ModelStateException <|-- NotUniqueException
+@enduml

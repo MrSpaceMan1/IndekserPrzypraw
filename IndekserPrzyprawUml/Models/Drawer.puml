@@ -1,0 +1,10 @@
+@startuml
+class Drawer {
+    + DrawerId : int <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+    + <<override>> ToString() : string
+}
+class "ICollection`1"<T> {
+}
+Drawer o-> "Spices<Spice>" "ICollection`1"
+@enduml

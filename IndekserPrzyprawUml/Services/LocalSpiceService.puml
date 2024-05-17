@@ -1,0 +1,20 @@
+@startuml
+class LocalSpiceService {
+    + LocalSpiceService(unitOfWork:UnitOfWork<SpicesContext>, mapper:IMapper)
+    + <<async>> GetSpiceByBarcodeAsync(barcode:string) : Task<BarcodeInfoDTO?>
+    + <<async>> GetAllSpicesAsync() : Task<IEnumerable<SpiceDTO>>
+    + <<async>> GetSpiceAsync(id:int) : Task<SpiceDTO?>
+    + <<async>> AddSpiceAsync(drawerId:int, addSpiceDto:AddSpiceDTO) : Task<SpiceDTO>
+    + <<async>> GetSpicesInDrawerAsync(drawerId:int) : Task<IEnumerable<SpiceDTO>>
+    + <<async>> RemoveSpiceAsync(spiceId:int) : Task
+    + <<async>> GetSpiceGroups() : Task<Dictionary<string, List<Spice>>>
+}
+class "UnitOfWork`1"<T> {
+}
+ISpiceService <|-- LocalSpiceService
+LocalSpiceService --> "_spiceGroupRepository" SpiceGroupRepository
+LocalSpiceService --> "_spiceRepository" SpiceRepository
+LocalSpiceService --> "_unitOfWork<SpicesContext>" "UnitOfWork`1"
+LocalSpiceService --> "_mapper" IMapper
+LocalSpiceService --> "_drawerRepository" DrawerRepository
+@enduml

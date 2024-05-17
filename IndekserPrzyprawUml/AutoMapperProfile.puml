@@ -1,0 +1,9 @@
+@startuml
+class AutoMapperProfile {
+}
+class OrganizationProfile {
+    + OrganizationProfile()
+}
+AutoMapperProfile +-- OrganizationProfile
+Profile <|-- OrganizationProfile
+@enduml

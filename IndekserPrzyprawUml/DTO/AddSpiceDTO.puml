@@ -1,0 +1,8 @@
+@startuml
+class AddSpiceDTO <<record>> {
+    + Name : string <<get>> <<init>>
+    + Grams : uint <<get>> <<init>>
+    + Barcode : string <<get>> <<init>>
+}
+AddSpiceDTO --> "ExpirationDate" DateOnly
+@enduml

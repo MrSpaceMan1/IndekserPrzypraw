@@ -7,7 +7,7 @@ import { setDrawers } from '@/stores/spiceStore.ts'
 import { useNavigate } from 'react-router-dom'
 
 export default function LoginPage() {
-  const [loginMode, setLoginMode] = useState(true)
+  const [loginMode, ] = useState(true)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -42,17 +42,15 @@ export default function LoginPage() {
         </h1>
       </div>
       <form id="login-form" onSubmit={loginMode ? handleLogin : handleRegister}>
-        <label htmlFor="email">Email</label>
-        <input name="email" id="email" type="email" />
+        <label htmlFor="email">Login</label>
+        <input name="email" id="email" />
         <label htmlFor="password">Password</label>
         <input name="password" id="password" type="password" />
         <button type="submit">{loginMode ? 'Log in' : 'Register'}</button>
       </form>
       <button
         className="unset underline"
-        onClick={() => setLoginMode(!loginMode)}
       >
-        {loginMode ? 'Register?' : 'Login?'}
       </button>
     </div>
   )

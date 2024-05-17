@@ -1,16 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using IndekserPrzypraw.DTO;
+using IndekserPrzypraw.Exceptions;
 using IndekserPrzypraw.Models;
 using IndekserPrzypraw.Profiles;
 using IndekserPrzypraw.Repositories;
+using Microsoft.AspNetCore.Mvc;
 
-namespace IndekserPrzypraw
+namespace IndekserPrzypraw.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
@@ -19,97 +15,108 @@ namespace IndekserPrzypraw
     private readonly SpiceMixRepository _spiceMixRepository;
     private readonly UnitOfWork<SpicesContext> _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly ILogger _logger;
 
-    public SpiceMixController(SpicesContext context, IMapper mapper)
+    public SpiceMixController(SpicesContext context, IMapper mapper, ILogger<SpiceMixController> logger)
     {
-      _spiceMixRepository = new SpiceMixRepository(context);
       _unitOfWork = new UnitOfWork<SpicesContext>(context);
+      _spiceMixRepository = new SpiceMixRepository(context);
       _mapper = mapper;
+      _logger = logger;
     }
 
     // GET: api/SpiceMix
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<SpiceMixRecipe>>> GetSpiceMixRecipes()
+    public async Task<ActionResult<IEnumerable<SpiceMixDTO>>> GetSpiceMixRecipes()
     {
       var spiceMixes = await _spiceMixRepository.GetAllSpiceMixAsync();
-      return Ok(_mapper.)
+      return Ok(_mapper.Map<List<SpiceMixRecipe>, List<SpiceMixDTO>>(spiceMixes));
     }
 
     // GET: api/SpiceMix/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<SpiceMixRecipe>> GetSpiceMixRecipe(int id)
+    public async Task<ActionResult<SpiceMixDTO>> GetSpiceMixRecipe(int id)
     {
-      var spiceMixRecipe = await _context.SpiceMixRecipes.FindAsync(id);
-
-      if (spiceMixRecipe == null)
-      {
+      var spiceMix = await _spiceMixRepository.GetSpiceMixAsync(id);
+      if (spiceMix is null)
         return NotFound();
-      }
-
-      return spiceMixRecipe;
+      return Ok(_mapper.Map<SpiceMixRecipe, SpiceMixDTO>(spiceMix));
     }
 
     // PUT: api/SpiceMix/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutSpiceMixRecipe(int id, SpiceMixRecipe spiceMixRecipe)
+    public async Task<IActionResult> PutSpiceMixRecipe(int id, AddSpiceMixRecipeDTO spiceMixRecipe)
     {
-      if (id != spiceMixRecipe.SpiceMixRecipeId)
-      {
-        return BadRequest();
-      }
+      var spiceMix = await _spiceMixRepository.GetSpiceMixAsync(id);
+      if (spiceMix is null) return NotFound();
+      var updatedSpiceMix = _mapper.Map(spiceMixRecipe, spiceMix);
 
-      _context.Entry(spiceMixRecipe).State = EntityState.Modified;
-
+      await _unitOfWork.BeginTransaction();
       try
       {
-        await _context.SaveChangesAsync();
+        await _spiceMixRepository.ChangeSpiceMixAsync(updatedSpiceMix);
+        await _unitOfWork.Commit();
+        return NoContent();
       }
-      catch (DbUpdateConcurrencyException)
+      catch
       {
-        if (!SpiceMixRecipeExists(id))
-        {
-          return NotFound();
-        }
-        else
-        {
-          throw;
-        }
+        await _unitOfWork.Rollback();
+        return BadRequest();
       }
-
-      return NoContent();
     }
 
     // POST: api/SpiceMix
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
-    public async Task<ActionResult<SpiceMixRecipe>> PostSpiceMixRecipe(SpiceMixRecipe spiceMixRecipe)
+    public async Task<ActionResult<SpiceMixDTO>> PostSpiceMixRecipe(AddSpiceMixRecipeDTO spiceMixRecipe)
     {
-      _context.SpiceMixRecipes.Add(spiceMixRecipe);
-      await _context.SaveChangesAsync();
-
-      return CreatedAtAction("GetSpiceMixRecipe", new { id = spiceMixRecipe.SpiceMixRecipeId }, spiceMixRecipe);
+      await _unitOfWork.BeginTransaction();
+      try
+      {
+        List<Ingredient> newIngredients = (
+          await _spiceMixRepository.AddIngredientsAsync(_mapper.Map<List<AddIngredientDTO>, List<Ingredient>>(spiceMixRecipe.Ingredients))
+          ).ToList();
+        var added = await _spiceMixRepository.AddSpiceMixAsync(new SpiceMixRecipe
+        {
+          Name = spiceMixRecipe.Name,
+          Ingredients = newIngredients
+        });
+        await _unitOfWork.Commit();
+        return Ok(_mapper.Map<SpiceMixRecipe, SpiceMixDTO>(added));
+      }
+      catch (Exception e)
+      {
+        await _unitOfWork.Rollback();
+        _logger.LogError(e.ToString());
+        return BadRequest();
+      }
     }
 
     // DELETE: api/SpiceMix/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSpiceMixRecipe(int id)
     {
-      var spiceMixRecipe = await _context.SpiceMixRecipes.FindAsync(id);
-      if (spiceMixRecipe == null)
+      await _unitOfWork.BeginTransaction();
+      try
       {
-        return NotFound();
+        await _spiceMixRepository.RemoveIngredientsAsync(id);
+        await _spiceMixRepository.RemoveSpiceMixAsync(id);
+        await _unitOfWork.Commit();
       }
-
-      _context.SpiceMixRecipes.Remove(spiceMixRecipe);
-      await _context.SaveChangesAsync();
-
+      catch (NotFoundException notFoundException)
+      {
+        await _unitOfWork.Rollback();
+        return this.BadRequestDueTo(notFoundException);
+      }
+      
+      catch (Exception e)
+      {
+        await _unitOfWork.Rollback();
+        _logger.LogError(e.ToString());
+        return BadRequest();
+      }
       return NoContent();
-    }
-
-    private bool SpiceMixRecipeExists(int id)
-    {
-      return _context.SpiceMixRecipes.Any(e => e.SpiceMixRecipeId == id);
     }
   }
 }

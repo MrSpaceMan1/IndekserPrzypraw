@@ -1,0 +1,5 @@
+@startuml
+class RemoveDrawerDTO <<record>> {
+    + newDrawerId : int <<get>> <<init>>
+}
+@enduml

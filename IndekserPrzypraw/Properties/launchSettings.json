@@ -22,7 +22,6 @@
     "https": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "commandLineArgs": "> stdout.txt",
       "launchBrowser": false,
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7027;http://localhost:5111",

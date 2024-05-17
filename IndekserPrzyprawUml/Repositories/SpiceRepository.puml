@@ -1,0 +1,36 @@
+@startuml
+interface ISpiceRepository {
+    AddSpiceAsync(spice:Spice) : Task<Spice>
+    GetAllSpicesAsync() : Task<IEnumerable<Spice>>
+    GetAllSpicesFromDrawerAsync(drawerId:int) : Task<IEnumerable<Spice>>
+    GetSpiceByIdAsync(id:int) : Task<Spice?>
+    GetSpiceByGroupsAsync(drawerId:int) : Task<Dictionary<String, List<Spice>>>
+    DeleteSpiceAsync(spice:Spice) : Task
+    TransferSpicesAsync(fromDrawerId:int, toDrawerId:int) : Task
+}
+class SpiceRepository {
+    + SpiceRepository(unitOfWork:UnitOfWork<SpicesContext>)
+    + <<async>> AddSpiceAsync(spice:Spice) : Task<Spice>
+    + <<async>> GetAllSpicesAsync() : Task<IEnumerable<Spice>>
+    + <<async>> GetAllSpicesFromDrawerAsync(drawerId:int) : Task<IEnumerable<Spice>>
+    + <<async>> GetSpiceByIdAsync(id:int) : Task<Spice?>
+    + <<async>> GetSpiceByGroupsAsync(drawerId:int) : Task<Dictionary<String, List<Spice>>>
+    + <<async>> GetSpiceByGroupsAsync() : Task<List<GroupByDrawerIdThenSpiceGroupName>>
+    + <<async>> DeleteSpiceAsync(spice:Spice) : Task
+    + <<async>> TransferSpicesAsync(fromDrawerId:int, toDrawerId:int) : Task
+}
+class "UnitOfWork`1"<T> {
+}
+class GroupByDrawerIdThenSpiceGroupName {
+    + DrawerId : int
+    + Name : string
+    + GroupByDrawerIdThenSpiceGroupName(drawerId:int, name:string, spices:List<Spice>)
+}
+class "List`1"<T> {
+}
+ISpiceRepository <|-- SpiceRepository
+SpiceRepository --> "_context" SpicesContext
+SpiceRepository --> "_unitOfWork<SpicesContext>" "UnitOfWork`1"
+SpiceRepository +-- GroupByDrawerIdThenSpiceGroupName
+GroupByDrawerIdThenSpiceGroupName --> "Spices<Spice>" "List`1"
+@enduml

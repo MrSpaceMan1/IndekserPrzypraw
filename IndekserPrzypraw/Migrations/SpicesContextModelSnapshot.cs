@@ -39,6 +39,31 @@ namespace IndekserPrzypraw.Migrations
                     b.ToTable("Drawers");
                 });
 
+            modelBuilder.Entity("IndekserPrzypraw.Models.Ingredient", b =>
+                {
+                    b.Property<int>("IngredientId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IngredientId"));
+
+                    b.Property<int>("Grams")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("SpiceMixRecipeId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("IngredientId");
+
+                    b.HasIndex("SpiceMixRecipeId");
+
+                    b.ToTable("Ingredient");
+                });
+
             modelBuilder.Entity("IndekserPrzypraw.Models.Spice", b =>
                 {
                     b.Property<int>("SpiceId")
@@ -95,6 +120,30 @@ namespace IndekserPrzypraw.Migrations
                     b.ToTable("SpiceGroups");
                 });
 
+            modelBuilder.Entity("IndekserPrzypraw.Models.SpiceMixRecipe", b =>
+                {
+                    b.Property<int>("SpiceMixRecipeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SpiceMixRecipeId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("SpiceMixRecipeId");
+
+                    b.ToTable("SpiceMixRecipes");
+                });
+
+            modelBuilder.Entity("IndekserPrzypraw.Models.Ingredient", b =>
+                {
+                    b.HasOne("IndekserPrzypraw.Models.SpiceMixRecipe", null)
+                        .WithMany("Ingredients")
+                        .HasForeignKey("SpiceMixRecipeId");
+                });
+
             modelBuilder.Entity("IndekserPrzypraw.Models.Spice", b =>
                 {
                     b.HasOne("IndekserPrzypraw.Models.SpiceGroup", "SpiceGroup")
@@ -125,6 +174,11 @@ namespace IndekserPrzypraw.Migrations
             modelBuilder.Entity("IndekserPrzypraw.Models.SpiceGroup", b =>
                 {
                     b.Navigation("Spices");
+                });
+
+            modelBuilder.Entity("IndekserPrzypraw.Models.SpiceMixRecipe", b =>
+                {
+                    b.Navigation("Ingredients");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,7 @@
+@startuml
+class BarcodeInfoDTO {
+    + Barcode : string <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+    + Grams : uint <<get>> <<set>>
+}
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+class SpiceDTO <<record>> {
+    + SpiceId : int <<get>> <<init>>
+    + Name : string <<get>> <<init>>
+    + Grams : uint <<get>> <<init>>
+    + SpiceGroupId : int <<get>> <<init>>
+    + DrawerId : int <<get>> <<init>>
+    + Barcode : string <<get>> <<init>>
+}
+SpiceDTO --> "ExpirationDate" DateOnly
+@enduml

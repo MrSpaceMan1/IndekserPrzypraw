@@ -1,0 +1,32 @@
+@startuml
+!include ./UnitOfWork.puml
+!include ./Program.puml
+!include ./AutoMapperProfile.puml
+!include ./Controllers/SpicesController.puml
+!include ./Controllers/ControllerExtensions.puml
+!include ./Controllers/DrawerController.puml
+!include ./Repositories/DrawerRepository.puml
+!include ./Repositories/SpiceGroupRepository.puml
+!include ./Repositories/SpiceRepository.puml
+!include ./Exceptions/NotEmptyException.puml
+!include ./Exceptions/ModelStateException.puml
+!include ./Exceptions/NotUniqueException.puml
+!include ./Exceptions/NotFoundException.puml
+!include ./Data/SpicesContext.puml
+!include ./Models/Drawer.puml
+!include ./Models/Ingredient.puml
+!include ./Models/Spice.puml
+!include ./Models/SpiceGroup.puml
+!include ./Models/SpiceMix.puml
+!include ./Services/ISpiceService.puml
+!include ./Services/LocalSpiceService.puml
+!include ./DTO/SpiceGroupDTO.puml
+!include ./DTO/UpdateSpiceGroupDTO.puml
+!include ./DTO/AddBarcodeInfoDTO.puml
+!include ./DTO/RemoveDrawerDTO.puml
+!include ./DTO/AddSpiceDTO.puml
+!include ./DTO/AddDrawerDTO.puml
+!include ./DTO/SpiceDTO.puml
+!include ./DTO/BarcodeInfoDTO.puml
+!include ./DTO/DrawerDTO.puml
+@enduml

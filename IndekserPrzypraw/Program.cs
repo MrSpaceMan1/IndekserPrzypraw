@@ -1,5 +1,7 @@
 using System.Reflection;
+using System.Security.Claims;
 using Castle.Components.DictionaryAdapter.Xml;
+using IndekserPrzypraw.Data;
 using IndekserPrzypraw.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
@@ -18,9 +20,12 @@ builder.Logging.AddSimpleConsole();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(opt => opt.AddSecurityDefinition("AspNetCoreIdentity", new OpenApiSecurityScheme()));
 builder.Services.AddDbContext<IdentityContext>(
-  options => options.UseNpgsql(
-    builder.Configuration.GetConnectionString("IdentityContext")
-  ));
+  options =>
+  {
+    options.UseNpgsql(
+      builder.Configuration.GetConnectionString("IdentityContext")
+    );
+  });
 builder.Services.AddDbContext<SpicesContext>(options =>
   options
     .UseNpgsql(
@@ -31,6 +36,15 @@ builder.Services.AddControllers();
 builder.Services.AddHttpsRedirection(opt => opt.HttpsPort = 443);
 
 var app = builder.Build();
+
+var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
+var scope = scopeFactory.CreateScope();
+{
+  var identityContext = scope.ServiceProvider.GetRequiredService<IdentityContext>();
+  var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+  var logger = scope.ServiceProvider.GetRequiredService<ILogger<IdentityUserInitializer>>();
+  IdentityUserInitializer.Initialize(identityContext, userManager, logger);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -1,0 +1,11 @@
+@startuml
+class Spice {
+    + SpiceId : int <<get>> <<set>>
+    + SpiceGroupId : int <<get>> <<set>>
+    + DrawerId : int <<get>> <<set>>
+    + <<override>> ToString() : string
+}
+Spice --> "SpiceGroup" SpiceGroup
+Spice --> "Drawer" Drawer
+Spice --> "ExpirationDate" DateOnly
+@enduml

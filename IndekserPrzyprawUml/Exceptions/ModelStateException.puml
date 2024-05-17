@@ -1,0 +1,8 @@
+@startuml
+abstract class ModelStateException {
+    + AddToModelState(modelState:ModelStateDictionary) : void
+}
+class "Action`1"<T> {
+}
+Exception <|-- ModelStateException
+@enduml

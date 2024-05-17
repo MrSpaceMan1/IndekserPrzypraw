@@ -105,9 +105,10 @@ export default function BarcodeScanner() {
           return barcode
         })
         .finally(() => {
+          Quagga.stop()
+          Quagga.CameraAccess.release()
           isFetchingBarcodeInfo.current = false
           navigate('/add-spice')
-          Quagga.stop()
         })
     }
   }
@@ -168,6 +169,7 @@ export default function BarcodeScanner() {
       .catch((err) => console.log(err))
 
     return () => {
+      Quagga.CameraAccess.release()
       Quagga.stop()
       Quagga.offProcessed()
       Quagga.offDetected()

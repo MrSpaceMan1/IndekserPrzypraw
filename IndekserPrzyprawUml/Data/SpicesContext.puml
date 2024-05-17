@@ -1,0 +1,11 @@
+@startuml
+class SpicesContext {
+    + SpicesContext(options:DbContextOptions<SpicesContext>)
+}
+class "DbSet`1"<T> {
+}
+DbContext <|-- SpicesContext
+SpicesContext --> "Drawers<Drawer>" "DbSet`1"
+SpicesContext --> "Spices<Spice>" "DbSet`1"
+SpicesContext --> "SpiceGroups<SpiceGroup>" "DbSet`1"
+@enduml

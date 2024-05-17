@@ -1,0 +1,22 @@
+@startuml
+interface ISpiceGroupRepository {
+    GetSpiceByBarcodeAsync(barcode:string) : Task<SpiceGroup?>
+    GetAllSpiceGroupsAsync() : Task<IEnumerable<SpiceGroup>>
+    GetSpiceGroupByIdAsync(spiceGroupId:int) : Task<SpiceGroup?>
+    GetSpiceGroupByNameAsync(spiceGroupName:string) : Task<SpiceGroup?>
+    AddSpiceGroupAsync(name:string, barcode:string, grams:uint, minimumCount:uint?, minimumGrams:uint?) : Task<SpiceGroup>
+}
+class SpiceGroupRepository {
+    + SpiceGroupRepository(unitOfWork:UnitOfWork<SpicesContext>)
+    + <<async>> GetSpiceByBarcodeAsync(barcode:string) : Task<SpiceGroup?>
+    + <<async>> GetAllSpiceGroupsAsync() : Task<IEnumerable<SpiceGroup>>
+    + <<async>> GetSpiceGroupByIdAsync(spiceGroupId:int) : Task<SpiceGroup?>
+    + <<async>> GetSpiceGroupByNameAsync(spiceGroupName:string) : Task<SpiceGroup?>
+    + <<async>> AddSpiceGroupAsync(name:string, barcode:string, grams:uint, minimumCount:uint?, minimumGrams:uint?) : Task<SpiceGroup>
+}
+class "UnitOfWork`1"<T> {
+}
+ISpiceGroupRepository <|-- SpiceGroupRepository
+SpiceGroupRepository --> "_context" SpicesContext
+SpiceGroupRepository --> "_unitOfWork<SpicesContext>" "UnitOfWork`1"
+@enduml

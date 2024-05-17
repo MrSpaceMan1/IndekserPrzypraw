@@ -1,0 +1,10 @@
+@startuml
+class DrawerDTO {
+    + DrawerId : int <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+    + DrawerDTO(drawerId:int, name:string, spices:List<SpiceGroupDTO>)
+}
+class "List`1"<T> {
+}
+DrawerDTO --> "Spices<SpiceGroupDTO>" "List`1"
+@enduml

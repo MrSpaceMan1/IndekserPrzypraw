@@ -1,0 +1,10 @@
+@startuml
+class SpiceGroup {
+    + SpiceGroupId : int <<get>> <<set>>
+    + Barcode : string <<get>> <<set>>
+    + Grams : uint <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+    + MinimumCount : uint? <<get>> <<set>>
+    + MinimumGrams : uint? <<get>> <<set>>
+}
+@enduml

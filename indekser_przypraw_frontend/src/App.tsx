@@ -9,7 +9,7 @@ export function App() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   useEffectOnce(() => {
-    ;(async () => {
+    (async () => {
       let isAvailable = null
       let drawers: Array<Drawer> | null = null
       try {

@@ -1,0 +1,7 @@
+@startuml
+class NotEmptyException {
+}
+class "Action`1"<T> {
+}
+ModelStateException <|-- NotEmptyException
+@enduml

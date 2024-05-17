@@ -1,0 +1,18 @@
+@startuml
+interface IUnitOfWork {
+    BeginTransaction() : Task
+    Rollback() : Task
+    Commit() : Task
+    Save() : Task
+}
+class "UnitOfWork`1"<TContext> {
+    + <<readonly>> Context : TContext
+    - _transaction : IDbContextTransaction?
+    + UnitOfWork(context:TContext)
+    + <<async>> BeginTransaction() : Task
+    + <<async>> Rollback() : Task
+    + <<async>> Commit() : Task
+    + <<async>> Save() : Task
+}
+IUnitOfWork <|-- "UnitOfWork`1"
+@enduml

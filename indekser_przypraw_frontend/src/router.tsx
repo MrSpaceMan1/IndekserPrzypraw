@@ -8,6 +8,7 @@ import { Router } from '@remix-run/router'
 import { App } from '@/App.tsx'
 import LoginPage from '@/views/LoginPage.tsx'
 import ShoppingListPage from '@/views/ShoppingListPage.tsx'
+import SpiceMixPage from '@/views/SpiceMixPage.tsx'
 
 const router: Router = createBrowserRouter([
   {
@@ -24,6 +25,7 @@ const router: Router = createBrowserRouter([
       { path: 'add-drawer', element: <AddDrawerFormPage /> },
       { path: 'drawer/:drawerId/settings', element: <DrawerSettingsPage /> },
       { path: 'shopping-list', element: <ShoppingListPage /> },
+      { path: 'spice-mixes', element: <SpiceMixPage />}
     ],
   },
 ])

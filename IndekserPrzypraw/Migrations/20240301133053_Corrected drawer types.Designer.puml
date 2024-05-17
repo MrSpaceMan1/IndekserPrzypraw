@@ -1,0 +1,5 @@
+@startuml
+class Correcteddrawertypes <<partial>> {
+    # <<override>> BuildTargetModel(modelBuilder:ModelBuilder) : void
+}
+@enduml

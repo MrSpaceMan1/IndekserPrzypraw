@@ -1,0 +1,22 @@
+@startuml
+interface IDrawerRepository {
+    GetDrawerByIdAsync(drawerId:int) : Task<Drawer?>
+    GetAllDrawersAsync() : Task<List<Drawer>>
+    AddDrawerAsync(drawer:Drawer) : Task<Drawer>
+    RemoveDrawerAsync(drawer:Drawer) : Task
+    UpdateDrawerAsync(drawer:Drawer) : Task
+}
+class DrawerRepository {
+    + DrawerRepository(unitOfWork:UnitOfWork<SpicesContext>)
+    + GetDrawerByIdAsync(drawerId:int) : Task<Drawer?>
+    + GetAllDrawersAsync() : Task<List<Drawer>>
+    + <<async>> AddDrawerAsync(newDrawer:Drawer) : Task<Drawer>
+    + <<async>> RemoveDrawerAsync(drawer:Drawer) : Task
+    + <<async>> UpdateDrawerAsync(drawer:Drawer) : Task
+}
+class "UnitOfWork`1"<T> {
+}
+IDrawerRepository <|-- DrawerRepository
+DrawerRepository --> "_context" SpicesContext
+DrawerRepository --> "_unitOfWork<SpicesContext>" "UnitOfWork`1"
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+class SpicesController {
+    + SpicesController(context:SpicesContext, logger:ILogger<SpicesController>, mapper:IMapper)
+    + <<async>> GetBarcodeInfo(barcode:string) : Task<ActionResult<BarcodeInfoDTO>>
+    + <<async>> GetSpices() : Task<ActionResult<IEnumerable<SpiceDTO>>>
+    + <<async>> GetSpice(id:int) : Task<ActionResult<SpiceDTO>>
+    + <<async>> PostSpice(drawerId:int, addSpiceDto:AddSpiceDTO) : Task<ActionResult<SpiceDTO>>
+    + <<async>> GetSpicesInDrawer(drawerId:int) : Task<ActionResult<SpiceDTO>>
+    + <<async>> DeleteSpice(id:int) : Task<IActionResult>
+    + <<async>> GetSpiceGroups() : Task<ActionResult>
+}
+class "ILogger`1"<T> {
+}
+class "UnitOfWork`1"<T> {
+}
+ControllerBase <|-- SpicesController
+SpicesController --> "_spiceService" ISpiceService
+SpicesController --> "_logger<SpicesController>" "ILogger`1"
+SpicesController --> "_unitOfWork<SpicesContext>" "UnitOfWork`1"
+@enduml

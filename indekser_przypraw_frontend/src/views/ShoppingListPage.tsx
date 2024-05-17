@@ -32,7 +32,7 @@ export default function ShoppingListPage() {
           style={{ lineHeight: 1.05 }}
           className="jetbrains-mono-normal max-width header-title"
         >
-          Shopping list
+          SHOPPING LIST
         </h1>
       </div>
       <div id="shopping-list-section">
