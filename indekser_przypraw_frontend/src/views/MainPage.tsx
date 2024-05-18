@@ -141,7 +141,9 @@ export default function MainPage() {
         <ButtonWrapper onClick={() => navigate('/barcode-scanner')}>
           <img src={addNewSvg} alt="Add new" />
         </ButtonWrapper>
-        <span className="header-icon"></span>
+        <ButtonWrapper onClick={() => navigate('/spice-mixes')}>
+          <img src={addNewSvg} alt="Add new" />
+        </ButtonWrapper>
       </div>
     </div>
   )

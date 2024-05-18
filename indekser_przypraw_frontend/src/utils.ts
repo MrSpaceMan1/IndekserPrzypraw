@@ -20,6 +20,10 @@ export function mapIfArray(
 declare global {
   interface Array<T> {
     groupBy<B>(fn: (item: T) => B): { [key: string]: T[] }
+    groupMap<B, C>(
+      fn: (item: T) => B,
+      map: (item: T) => C
+    ): { [key: string]: C[] }
     maxBy<B>(fn: (item: T) => B): B
     minBy<B>(fn: (item: T) => B): B
   }
@@ -34,6 +38,19 @@ Array.prototype.groupBy = function groupBy<T, B>(
   })
   return result
 }
+
+Array.prototype.groupMap = function groupMap<T, B, C>(
+  fn: (item: T) => B,
+  map: (item: T) => C
+): { [key: string]: C[] } {
+  const result: Record<string, C[]> = {}
+  this.forEach((item: T) => {
+    if (result[`${fn(item)}`] === undefined) result[`${fn(item)}`] = [map(item)]
+    else result[`${fn(item)}`].push(map(item))
+  })
+  return result
+}
+
 Array.prototype.maxBy = function maxBy<T, B>(fn: (item: T) => B): B {
   let max = fn(this?.[0])
   for (let i = 1; i < this.length; i++)

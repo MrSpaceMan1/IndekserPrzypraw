@@ -9,6 +9,7 @@ import { App } from '@/App.tsx'
 import LoginPage from '@/views/LoginPage.tsx'
 import ShoppingListPage from '@/views/ShoppingListPage.tsx'
 import SpiceMixPage from '@/views/SpiceMixPage.tsx'
+import AddSpiceMixFormPage from '@/views/AddSpiceMixFormPage.tsx'
 
 const router: Router = createBrowserRouter([
   {
@@ -25,7 +26,8 @@ const router: Router = createBrowserRouter([
       { path: 'add-drawer', element: <AddDrawerFormPage /> },
       { path: 'drawer/:drawerId/settings', element: <DrawerSettingsPage /> },
       { path: 'shopping-list', element: <ShoppingListPage /> },
-      { path: 'spice-mixes', element: <SpiceMixPage />}
+      { path: 'spice-mixes', element: <SpiceMixPage /> },
+      { path: 'add-spice-mix', element: <AddSpiceMixFormPage /> },
     ],
   },
 ])
