@@ -1,7 +1,7 @@
 import Ingredient from '@/types/Ingredient.ts'
 
-export default interface SpiceMix{
-  name: string,
-  spiceMixId: number
+export default interface SpiceMix {
+  name: string
+  spiceMixRecipeId: number
   ingredients: Ingredient[]
 }

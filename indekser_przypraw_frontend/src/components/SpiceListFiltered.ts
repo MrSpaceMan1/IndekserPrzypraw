@@ -1,20 +1,23 @@
-import { SpiceGroup } from '@/types'
 import levenshtein from 'fast-levenshtein'
 
-export default function filteredSpiceList(
-  spiceGroups: SpiceGroup[],
+export default function filteredList<T>(
+  items: T[],
+  keySelector: (item: T) => string,
   filterPhrase: string
 ) {
-  const minLevenshteinDist = spiceGroups.minBy((group) =>
+  const minLevenshteinDist = items.minBy((group) =>
     levenshtein.get(
-      group.name.replace(' ', '').slice(0, filterPhrase.length).toLowerCase(),
+      keySelector(group)
+        .replace(' ', '')
+        .slice(0, filterPhrase.length)
+        .toLowerCase(),
       filterPhrase.toLowerCase()
     )
   )
-  return spiceGroups.filter(
-    (spiceGroups) =>
+  return items.filter(
+    (item) =>
       levenshtein.get(
-        spiceGroups.name.slice(0, filterPhrase.length).toLowerCase(),
+        keySelector(item).slice(0, filterPhrase.length).toLowerCase(),
         filterPhrase.toLowerCase()
       ) == minLevenshteinDist
   )

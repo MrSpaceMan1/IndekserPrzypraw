@@ -12,7 +12,7 @@ import '../components/NestedListItem.css'
 import '../components/NestedList.css'
 import { Tooltip } from 'react-tooltip'
 import { setSelected } from '@/stores/spiceStore.ts'
-import filteredSpiceList from '@/components/SpiceListFiltered.ts'
+import filteredList from '@/components/SpiceListFiltered.ts'
 import shoppingListSvf from '@/assets/shopping-list.svg'
 
 export default function MainPage() {
@@ -120,7 +120,7 @@ export default function MainPage() {
         {drawer &&
           (
             (filterString
-              ? filteredSpiceList(drawer.spices, filterString)
+              ? filteredList(drawer.spices, (item) => item.name, filterString)
               : drawer.spices) ?? []
           ).map((spiceGroup) => (
             <SpiceList key={spiceGroup.spiceGroupId} spiceGroup={spiceGroup} />

@@ -51,10 +51,9 @@
   position: fixed;
   display: flex;
   left: 0;
-  padding: 0 1rem;
-  justify-content: space-between;
+  justify-content: space-around;
   bottom: 0;
-  width: calc(100% - 2rem);
+  width: 100%;
   max-width: 1280px;
   height: 4rem;
   background-color: var(--primary-300);

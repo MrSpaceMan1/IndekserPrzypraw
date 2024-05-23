@@ -16,6 +16,7 @@ export default function SpiceList({ spiceGroup }: SpiceListProps) {
       headerClassNames={[isUnder ? 'is-under' : '']}
       key={spiceGroup.spiceGroupId}
       iconClassNames={[isUnder ? 'menu-header-icon-invert' : '']}
+      openByDefault={false}
       label={
         <>
           <h2>{spiceGroup.name}</h2>

@@ -18,6 +18,27 @@ export function mapIfArray(
 }
 
 declare global {
+  interface SetConstructor {
+    constructBy<T, B>(values: Iterable<T>, fn: (item: T) => B): Set<T>
+  }
+}
+
+Set.constructBy = function constructBy<T, B>(
+  values: Iterable<T>,
+  fn: (item: T) => B
+): Set<T> {
+  const set = new Set<T>()
+  const keys = new Set<B>()
+  for (const item of values) {
+    if (!keys.has(fn(item))) {
+      set.add(item)
+      keys.add(fn(item))
+    }
+  }
+  return set
+}
+
+declare global {
   interface Array<T> {
     groupBy<B>(fn: (item: T) => B): { [key: string]: T[] }
     groupMap<B, C>(

@@ -3,23 +3,25 @@ import gearSvg from '@/assets/gear.svg'
 import funnelSvg from '@/assets/funnel.svg'
 import dropdownSvg from '@/assets/dropdown.svg'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useEffectOnce } from '@/hooks/UseEffectOnce.ts'
 import { useDispatch, useSelector } from 'react-redux'
 import { StoreState } from '@/stores/store.ts'
 import spiceApi from '@/wretchConfig.ts'
 import { SpiceMix } from '@/types'
-import { setSpiceMixes } from '@/stores/spiceMixStore.ts'
-import shoppingListSvf from '@/assets/shopping-list.svg'
+import { removeSpiceMix, setSpiceMixes } from '@/stores/spiceMixStore.ts'
 import addNewSvg from '@/assets/add_new.svg'
+import filteredList from '@/components/SpiceListFiltered.ts'
+import SpiceMixList from '@/components/SpiceMixList.tsx'
 
 export default function SpiceMixPage() {
   const navigate = useNavigate()
-  const dispatch = useDispatch
+  const dispatch = useDispatch()
   const spiceMixes = useSelector(
     (state: StoreState) => state.spiceMix.spiceMixes
   )
   const [filterString, setFilterString] = useState('')
+  const isDeleting = useRef<boolean>(false)
 
   useEffectOnce(() => {
     if (spiceMixes.length) return
@@ -29,6 +31,22 @@ export default function SpiceMixPage() {
       .json<SpiceMix[]>()
       .then((mixes) => dispatch(setSpiceMixes(mixes)))
   })
+
+  const removeMix = (id: number) => {
+    if (isDeleting.current) return
+    isDeleting.current = true
+    spiceApi
+      .url('SpiceMix/')
+      .delete(`${id}`)
+      .res()
+      .then(() => {
+        dispatch(removeSpiceMix(id))
+      })
+      .catch()
+      .finally(() => {
+        isDeleting.current = false
+      })
+  }
 
   return (
     <>
@@ -67,15 +85,25 @@ export default function SpiceMixPage() {
         </span>
       </div>
       <div id="main-content">
-        {spiceMixes && spiceMixes.map((spiceMix) => JSON.stringify(spiceMix))}
-        {/*{drawer &&*/}
-        {/*  (*/}
-        {/*    (filterString*/}
-        {/*      ? filteredSpiceList(drawer.spices, filterString)*/}
-        {/*      : drawer.spices) ?? []*/}
-        {/*  ).map((spiceGroup) => (*/}
-        {/*    <SpiceList key={spiceGroup.spiceGroupId} spiceGroup={spiceGroup} />*/}
-        {/*  ))}*/}
+        {spiceMixes &&
+          (filterString
+            ? filteredList(spiceMixes, (item) => item.name, filterString)
+            : spiceMixes
+          ).map((spiceMix) => (
+            <div>
+              <SpiceMixList spiceMix={spiceMix} />
+              <button
+                style={{
+                  display: 'block',
+                  marginLeft: 'auto',
+                  marginRight: '1rem',
+                }}
+                onClick={() => removeMix(spiceMix.spiceMixRecipeId)}
+              >
+                Usuń
+              </button>
+            </div>
+          ))}
       </div>
       <div id="action-bar">
         <span className="header-icon"></span>

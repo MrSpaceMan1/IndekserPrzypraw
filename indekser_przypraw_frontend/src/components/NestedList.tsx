@@ -8,10 +8,11 @@ import { join } from '@/utils.ts'
 export default function NestedList({
   children,
   label,
+  openByDefault = false,
   headerClassNames = [],
   iconClassNames = [],
 }: NestedListParams) {
-  const [isCollapsed, setIsCollapsed] = useState(!label)
+  const [isCollapsed, setIsCollapsed] = useState(openByDefault)
 
   function toggleCollapse() {
     setIsCollapsed((collapsed) => !collapsed)
