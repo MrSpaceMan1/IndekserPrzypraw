@@ -12,7 +12,6 @@ public interface ISpiceRepository
   Task<IEnumerable<Spice>> GetAllSpicesAsync();
   Task<IEnumerable<Spice>> GetAllSpicesFromDrawerAsync(int drawerId);
   Task<Spice?> GetSpiceByIdAsync(int id);
-  Task<Dictionary<String, List<Spice>>> GetSpiceByGroupsAsync(int drawerId);
   Task DeleteSpiceAsync(Spice spice);
 }
 
@@ -20,8 +19,8 @@ public class SpiceRepository : ISpiceRepository
 {
   private readonly SpicesContext _context;
   private readonly UnitOfWork<SpicesContext> _unitOfWork;
-    
-  
+
+
   public SpiceRepository(UnitOfWork<SpicesContext> unitOfWork)
   {
     _unitOfWork = unitOfWork;
@@ -57,20 +56,6 @@ public class SpiceRepository : ISpiceRepository
   public async Task<Spice?> GetSpiceByIdAsync(int id)
   {
     return await _context.Spices.AsNoTracking().FirstOrDefaultAsync(spice => spice.SpiceId == id);
-  }
-
-  public async Task<Dictionary<String, List<Spice>>> GetSpiceByGroupsAsync(int drawerId)
-  {
-    // Dictionary<String, IEnumerable<Spice>> spiceGroups;
-
-      var spiceGroups = await _context.Spices
-        .AsNoTracking()
-        .Include(spice =>spice.SpiceGroup )
-        .Where(spice => spice.SpiceGroup.DrawerId == drawerId)
-        .GroupBy(spice => spice.SpiceGroup.Name)
-        .ToDictionaryAsync(group => group.Key, group => group.ToList());
-    
-    return spiceGroups;
   }
 
   public async Task DeleteSpiceAsync(Spice spice)

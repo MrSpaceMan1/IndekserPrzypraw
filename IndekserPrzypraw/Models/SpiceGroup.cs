@@ -13,9 +13,9 @@ public class SpiceGroup
   [Range(0, Int32.MaxValue)] public int? MinimumCount { get; set; }
   [Range(0, Int32.MaxValue)] public int? MinimumGrams { get; set; }
 
-  public int DrawerId { get; set; }
+  [Required] public int DrawerId { get; set; }
 
-  public Drawer Drawer { get; set; }
+  [Required] public Drawer Drawer { get; set; }
 
   public ICollection<Spice> Spices { get; set; }
 

@@ -12,8 +12,8 @@ namespace IndekserPrzypraw.Controllers
   [ApiController]
   public class SpiceMixController : ControllerBase
   {
-    private readonly SpiceMixRepository _spiceMixRepository;
-    private readonly UnitOfWork<SpicesContext> _unitOfWork;
+    private readonly ISpiceMixRepository _spiceMixRepository;
+    private readonly IUnitOfWork<SpicesContext> _unitOfWork;
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
 

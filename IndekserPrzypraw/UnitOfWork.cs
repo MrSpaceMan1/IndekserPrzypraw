@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace IndekserPrzypraw.Profiles;
 
-public interface IUnitOfWork
+public interface IUnitOfWork<TContext> where TContext : DbContext
 {
   Task BeginTransaction();
   Task Rollback();
@@ -11,7 +11,7 @@ public interface IUnitOfWork
   Task Save();
 }
 
-public class UnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
+public class UnitOfWork<TContext> : IUnitOfWork<TContext> where TContext : DbContext
 {
   public readonly TContext Context;
   private IDbContextTransaction? _transaction;
@@ -20,7 +20,7 @@ public class UnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
   {
     Context = context;
   }
-  
+
   public async Task BeginTransaction()
   {
     _transaction = await Context.Database.BeginTransactionAsync();

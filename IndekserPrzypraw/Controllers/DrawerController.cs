@@ -13,7 +13,7 @@ namespace IndekserPrzypraw.Controllers;
 [ApiController]
 public class DrawerController : ControllerBase
 {
-  private readonly DrawerRepository _drawerRepository;
+  private readonly IDrawerRepository _drawerRepository;
   private readonly ILogger<DrawerController> _logger;
   private readonly IMapper _mapper;
   private readonly SpiceGroupRepository _spiceGroupRepository;

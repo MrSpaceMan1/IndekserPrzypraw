@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndekserPrzypraw", "IndekserPrzypraw\IndekserPrzypraw.csproj", "{7476DDF3-D01E-4C68-B2A9-3EE2B825EC15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndekserPrzyprawTests", "IndekserPrzyprawTests\IndekserPrzyprawTests.csproj", "{5699EA5C-2EC6-4064-9EC8-BEE34E314334}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{7476DDF3-D01E-4C68-B2A9-3EE2B825EC15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7476DDF3-D01E-4C68-B2A9-3EE2B825EC15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7476DDF3-D01E-4C68-B2A9-3EE2B825EC15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5699EA5C-2EC6-4064-9EC8-BEE34E314334}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5699EA5C-2EC6-4064-9EC8-BEE34E314334}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5699EA5C-2EC6-4064-9EC8-BEE34E314334}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5699EA5C-2EC6-4064-9EC8-BEE34E314334}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
