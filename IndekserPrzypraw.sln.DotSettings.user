@@ -1,22 +1,28 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer /&gt;</s:String>
-	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">C:\Users\MrSpaceMan1\AppData\Local\JetBrains\Rider2023.3\resharper-host\temp\Rider\vAny\CoverageData\_IndekserPrzypraw.1734933457\Snapshot\snapshot.utdcvr</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=62f31b41_002D04ff_002D41a2_002Dbf4c_002Dddcfe7719905/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GetAllSpicesFromDrawer_AllSpicesInCorrectDrawer" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.SpiceRepositoryTest&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.SpiceGroupRepositoryTest.GetSpiceGroupByName_InExactDrawer_ReturnsWithCorrectName&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.SpiceGroupRepositoryTest&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.DrawerRepositoryTest.RemoveDrawerAsync_CorrectlyRemoved&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
+	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">/home/mrspaceman1/.cache/JetBrains/Rider2023.3/resharper-host/temp/Rider/vAny/CoverageData/_IndekserPrzypraw.734110461/Snapshot/snapshot.utdcvr</s:String>
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=62f31b41_002D04ff_002D41a2_002Dbf4c_002Dddcfe7719905/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GetAllSpicesFromDrawer_AllSpicesInCorrectDrawer" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.SpiceRepositoryTest&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.SpiceGroupRepositoryTest.GetSpiceGroupByName_InExactDrawer_ReturnsWithCorrectName&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.SpiceGroupRepositoryTest&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.DrawerRepositoryTest.RemoveDrawerAsync_CorrectlyRemoved&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.DrawerRepositoryTest.GetDrawerByIdAsync_NotNull&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.DrawerRepositoryTest.GetAllDrawerAsync_NotNull&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.DrawerRepositoryTest.AddDrawerAsync_CorrectlyAdded&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.DrawerRepositoryTest&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d4bf68a6_002D3c0f_002D4a97_002D8623_002Df31ace9d8363/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="SpiceRepositoryTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.SpiceRepositoryTest&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.SpiceGroupRepositoryTest.GetSpiceGroupByName_InExactDrawer_ReturnsWithCorrectName&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.SpiceGroupRepositoryTest&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.DrawerRepositoryTest.RemoveDrawerAsync_CorrectlyRemoved&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d4bf68a6_002D3c0f_002D4a97_002D8623_002Df31ace9d8363/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="SpiceRepositoryTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.SpiceRepositoryTest&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.SpiceGroupRepositoryTest.GetSpiceGroupByName_InExactDrawer_ReturnsWithCorrectName&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.SpiceGroupRepositoryTest&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.DrawerRepositoryTest.RemoveDrawerAsync_CorrectlyRemoved&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.DrawerRepositoryTest&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Dtos/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

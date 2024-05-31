@@ -10,19 +10,25 @@ namespace IndekserPrzypraw.Services;
 
 public class LocalSpiceService : ISpiceService
 {
-  private SpiceGroupRepository _spiceGroupRepository;
-  private SpiceRepository _spiceRepository;
-  private UnitOfWork<SpicesContext> _unitOfWork;
+  private ISpiceGroupRepository _spiceGroupRepository;
+  private ISpiceRepository _spiceRepository;
+  private IUnitOfWork<SpicesContext> _unitOfWork;
   private IMapper _mapper;
-  private DrawerRepository _drawerRepository;
+  private IDrawerRepository _drawerRepository;
   private ILogger _logger;
 
-  public LocalSpiceService(UnitOfWork<SpicesContext> unitOfWork, IMapper mapper, ILogger logger)
+  public LocalSpiceService(
+    IUnitOfWork<SpicesContext> unitOfWork, 
+    ISpiceGroupRepository spiceGroupRepository, 
+    ISpiceRepository spiceRepository, 
+    IDrawerRepository drawerRepository, 
+    IMapper mapper, 
+    ILogger logger)
   {
     _unitOfWork = unitOfWork;
-    _spiceGroupRepository = new SpiceGroupRepository(_unitOfWork);
-    _spiceRepository = new SpiceRepository(_unitOfWork);
-    _drawerRepository = new DrawerRepository(_unitOfWork);
+    _spiceGroupRepository = spiceGroupRepository;
+    _spiceRepository = spiceRepository;
+    _drawerRepository = drawerRepository;
     _mapper = mapper;
     _logger = logger;
   }

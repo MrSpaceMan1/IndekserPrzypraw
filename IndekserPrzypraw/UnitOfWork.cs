@@ -5,6 +5,7 @@ namespace IndekserPrzypraw.Profiles;
 
 public interface IUnitOfWork<TContext> where TContext : DbContext
 {
+  TContext Context { get; }
   Task BeginTransaction();
   Task Rollback();
   Task Commit();
@@ -13,7 +14,7 @@ public interface IUnitOfWork<TContext> where TContext : DbContext
 
 public class UnitOfWork<TContext> : IUnitOfWork<TContext> where TContext : DbContext
 {
-  public readonly TContext Context;
+  public TContext Context { get; }
   private IDbContextTransaction? _transaction;
 
   public UnitOfWork(TContext context)

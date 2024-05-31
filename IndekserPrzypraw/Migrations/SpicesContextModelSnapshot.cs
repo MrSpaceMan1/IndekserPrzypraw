@@ -160,7 +160,7 @@ namespace IndekserPrzypraw.Migrations
                     b.HasOne("IndekserPrzypraw.Models.Drawer", "Drawer")
                         .WithMany("SpiceGroups")
                         .HasForeignKey("DrawerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Drawer");

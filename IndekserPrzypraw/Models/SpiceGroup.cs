@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace IndekserPrzypraw.Models;
 
@@ -15,7 +16,9 @@ public class SpiceGroup
 
   [Required] public int DrawerId { get; set; }
 
-  [Required] public Drawer Drawer { get; set; }
+  [Required] 
+  [DeleteBehavior(DeleteBehavior.NoAction)]
+  public Drawer Drawer { get; set; }
 
   public ICollection<Spice> Spices { get; set; }
 

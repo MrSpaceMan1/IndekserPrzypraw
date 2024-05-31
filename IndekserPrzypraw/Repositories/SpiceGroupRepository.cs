@@ -25,9 +25,9 @@ public interface ISpiceGroupRepository
 public class SpiceGroupRepository : ISpiceGroupRepository
 {
   private readonly SpicesContext _context;
-  private readonly UnitOfWork<SpicesContext> _unitOfWork;
+  private readonly IUnitOfWork<SpicesContext> _unitOfWork;
 
-  public SpiceGroupRepository(UnitOfWork<SpicesContext> unitOfWork)
+  public SpiceGroupRepository(IUnitOfWork<SpicesContext> unitOfWork)
   {
     _unitOfWork = unitOfWork;
     _context = unitOfWork.Context;

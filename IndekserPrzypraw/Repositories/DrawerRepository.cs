@@ -17,9 +17,9 @@ public interface IDrawerRepository
 public class DrawerRepository : IDrawerRepository
 {
   private readonly SpicesContext _context;
-  private readonly UnitOfWork<SpicesContext> _unitOfWork;
+  private readonly IUnitOfWork<SpicesContext> _unitOfWork;
 
-  public DrawerRepository(UnitOfWork<SpicesContext> unitOfWork)
+  public DrawerRepository(IUnitOfWork<SpicesContext> unitOfWork)
   {
     _unitOfWork = unitOfWork;
     _context = unitOfWork.Context;

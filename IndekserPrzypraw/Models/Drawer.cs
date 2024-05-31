@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace IndekserPrzypraw.Models;
 

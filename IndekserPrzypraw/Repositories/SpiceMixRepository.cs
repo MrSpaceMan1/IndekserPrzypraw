@@ -1,6 +1,7 @@
 using IndekserPrzypraw.DTO;
 using IndekserPrzypraw.Exceptions;
 using IndekserPrzypraw.Models;
+using IndekserPrzypraw.Profiles;
 using Microsoft.EntityFrameworkCore;
 
 namespace IndekserPrzypraw.Repositories;
@@ -21,9 +22,9 @@ public class SpiceMixRepository : ISpiceMixRepository
 {
   private SpicesContext _spiceContext;
 
-  public SpiceMixRepository(SpicesContext spicesContext)
+  public SpiceMixRepository(IUnitOfWork<SpicesContext> unitOfWork)
   {
-    _spiceContext = spicesContext;
+    _spiceContext = unitOfWork.Context;
   }
 
   public Task<List<SpiceMixRecipe>> GetAllSpiceMixAsync()

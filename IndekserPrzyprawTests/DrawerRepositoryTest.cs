@@ -56,7 +56,7 @@ public class DrawerRepositoryTest : IClassFixture<DatabaseFixture>
   }
 
   [Fact]
-  public async void RemoveDrawerAsync_CorrectlyRemoved()
+  public async void RemoveDrawerAsync_DrawerWithSpicesThrowsInvalidOperationException()
   {
     await using var context = Fixture.CreateContext();
     var unitOfWork = new UnitOfWork<SpicesContext>(context);
@@ -64,16 +64,42 @@ public class DrawerRepositoryTest : IClassFixture<DatabaseFixture>
 
     await unitOfWork.BeginTransaction();
     var firstDrawer = context.Drawers.Include(drawer => drawer.SpiceGroups).First();
-    await drawerRepository.RemoveDrawerAsync(firstDrawer);
-    var foundDrawer = context.Drawers.Find(firstDrawer.DrawerId);
-    Assert.Null(foundDrawer);
+    await Assert.ThrowsAsync<InvalidOperationException>(async () => await drawerRepository.RemoveDrawerAsync(firstDrawer));
 
     await unitOfWork.Rollback();
   }
 
+  [Fact]
+  public async void RemoveDrawerAsync_DrawerWithNoSpicesSuccessfulyRemoves()
+  {
+    await using var context = Fixture.CreateContext();
+    var unitOfWork = new UnitOfWork<SpicesContext>(context);
+    var drawerRepository = new DrawerRepository(unitOfWork);
+
+    await unitOfWork.BeginTransaction();
+    var firstDrawer = context.Drawers.Include(drawer => drawer.SpiceGroups).First();
+    context.RemoveRange(firstDrawer.SpiceGroups);
+    await drawerRepository.RemoveDrawerAsync(firstDrawer);
+    var found = context.Drawers.FirstOrDefault(drawer => drawer.DrawerId == firstDrawer.DrawerId);
+    Assert.Null(found);
+    
+    await unitOfWork.Rollback();
+  }
 
   [Fact]
-  public async void UpdateDrawerAsync_Updated()
+  public async void UpdateDrawerAsync_Updated() 
   {
+    await using var context = Fixture.CreateContext();
+    var unitOfWork = new UnitOfWork<SpicesContext>(context);
+    var drawerRepository = new DrawerRepository(unitOfWork);
+
+    await unitOfWork.BeginTransaction();
+    var firstDrawer = context.Drawers.First();
+    firstDrawer.Name = "Test1";
+    await drawerRepository.UpdateDrawerAsync(firstDrawer);
+    var foundDrawer = context.Drawers.Find(firstDrawer.DrawerId);
+    Assert.Equal(firstDrawer, foundDrawer);
+    
+    await unitOfWork.Rollback();
   }
 }

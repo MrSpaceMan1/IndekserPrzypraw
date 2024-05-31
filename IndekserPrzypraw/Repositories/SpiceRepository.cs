@@ -18,10 +18,10 @@ public interface ISpiceRepository
 public class SpiceRepository : ISpiceRepository
 {
   private readonly SpicesContext _context;
-  private readonly UnitOfWork<SpicesContext> _unitOfWork;
+  private readonly IUnitOfWork<SpicesContext> _unitOfWork;
 
 
-  public SpiceRepository(UnitOfWork<SpicesContext> unitOfWork)
+  public SpiceRepository(IUnitOfWork<SpicesContext> unitOfWork)
   {
     _unitOfWork = unitOfWork;
     _context = unitOfWork.Context;

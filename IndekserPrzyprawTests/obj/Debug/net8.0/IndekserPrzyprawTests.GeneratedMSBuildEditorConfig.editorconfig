@@ -16,6 +16,6 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = IndekserPrzyprawTests
-build_property.ProjectDir = C:\Users\MrSpaceMan1\RiderProjects\IndekserPrzypraw\IndekserPrzyprawTests\
+build_property.ProjectDir = /home/mrspaceman1/repos/IndekserPrzypraw/IndekserPrzyprawTests/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

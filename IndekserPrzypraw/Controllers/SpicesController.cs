@@ -25,6 +25,9 @@ namespace IndekserPrzypraw.Controllers
       _unitOfWork = new UnitOfWork<SpicesContext>(context);
       _spiceService = new LocalSpiceService(
         _unitOfWork,
+        new SpiceGroupRepository(_unitOfWork),
+        new SpiceRepository(_unitOfWork),
+        new DrawerRepository(_unitOfWork),
         mapper,
         logger
       );
