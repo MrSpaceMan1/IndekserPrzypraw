@@ -91,7 +91,14 @@ public class SpiceGroupRepositoryTest : IClassFixture<DatabaseFixture>
     var firstDrawer = context.Drawers.First();
     await unitOfWork.BeginTransaction();
     await spiceGroupRepository.AddSpiceGroupAsync(
-      "Test1", "2222222222222", 10, firstDrawer.DrawerId, 2, null);
+      new SpiceGroup
+      {
+        Name = "Test1",
+        Barcode = "2222222222222",
+        Grams = 10,
+        DrawerId = firstDrawer.DrawerId,
+        MinimumGrams = 2
+      });
 
     var foundSpiceGroup = context.SpiceGroups.First(group => group.Name == "Test1");
     Assert.NotNull(foundSpiceGroup);

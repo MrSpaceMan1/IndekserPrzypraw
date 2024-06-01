@@ -28,8 +28,7 @@ namespace IndekserPrzypraw.Controllers
         new SpiceGroupRepository(_unitOfWork),
         new SpiceRepository(_unitOfWork),
         new DrawerRepository(_unitOfWork),
-        mapper,
-        logger
+        mapper
       );
       _mapper = mapper;
       _logger = logger;

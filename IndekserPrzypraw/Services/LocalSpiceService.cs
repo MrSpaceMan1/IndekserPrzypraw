@@ -15,22 +15,19 @@ public class LocalSpiceService : ISpiceService
   private IUnitOfWork<SpicesContext> _unitOfWork;
   private IMapper _mapper;
   private IDrawerRepository _drawerRepository;
-  private ILogger _logger;
 
   public LocalSpiceService(
-    IUnitOfWork<SpicesContext> unitOfWork, 
-    ISpiceGroupRepository spiceGroupRepository, 
-    ISpiceRepository spiceRepository, 
-    IDrawerRepository drawerRepository, 
-    IMapper mapper, 
-    ILogger logger)
+    IUnitOfWork<SpicesContext> unitOfWork,
+    ISpiceGroupRepository spiceGroupRepository,
+    ISpiceRepository spiceRepository,
+    IDrawerRepository drawerRepository,
+    IMapper mapper)
   {
     _unitOfWork = unitOfWork;
     _spiceGroupRepository = spiceGroupRepository;
     _spiceRepository = spiceRepository;
     _drawerRepository = drawerRepository;
     _mapper = mapper;
-    _logger = logger;
   }
 
   public async Task<BarcodeInfoDTO?> GetSpiceByBarcodeAsync(string barcode)
@@ -65,18 +62,23 @@ public class LocalSpiceService : ISpiceService
     if (spiceGroup is null)
     {
       spiceGroup = await _spiceGroupRepository.AddSpiceGroupAsync(
-        addSpiceDto.Name,
-        addSpiceDto.Barcode,
-        addSpiceDto.Grams,
-        drawerId,
-        null,
-        null
+        new SpiceGroup
+        {
+          Name = addSpiceDto.Name,
+          Barcode = addSpiceDto.Barcode,
+          Grams = addSpiceDto.Grams,
+          DrawerId = drawerId,
+          Drawer = drawer,
+          MinimumGrams = null,
+          MinimumCount = null
+        }
       );
     }
 
     Spice spice = await _spiceRepository.AddSpiceAsync(new Spice
     {
       SpiceGroupId = spiceGroup.SpiceGroupId,
+      SpiceGroup = spiceGroup,
       ExpirationDate = addSpiceDto.ExpirationDate ?? null,
     });
     await _unitOfWork.Commit();

@@ -20,7 +20,7 @@ namespace IndekserPrzypraw.Controllers
     public SpiceMixController(SpicesContext context, IMapper mapper, ILogger<SpiceMixController> logger)
     {
       _unitOfWork = new UnitOfWork<SpicesContext>(context);
-      _spiceMixRepository = new SpiceMixRepository(context);
+      _spiceMixRepository = new SpiceMixRepository(_unitOfWork);
       _mapper = mapper;
       _logger = logger;
     }
@@ -75,8 +75,9 @@ namespace IndekserPrzypraw.Controllers
       try
       {
         List<Ingredient> newIngredients = (
-          await _spiceMixRepository.AddIngredientsAsync(_mapper.Map<List<AddIngredientDTO>, List<Ingredient>>(spiceMixRecipe.Ingredients))
-          ).ToList();
+          await _spiceMixRepository.AddIngredientsAsync(
+            _mapper.Map<List<AddIngredientDTO>, List<Ingredient>>(spiceMixRecipe.Ingredients))
+        ).ToList();
         var added = await _spiceMixRepository.AddSpiceMixAsync(new SpiceMixRecipe
         {
           Name = spiceMixRecipe.Name,
@@ -109,13 +110,14 @@ namespace IndekserPrzypraw.Controllers
         await _unitOfWork.Rollback();
         return this.BadRequestDueTo(notFoundException);
       }
-      
+
       catch (Exception e)
       {
         await _unitOfWork.Rollback();
         _logger.LogError(e.ToString());
         return BadRequest();
       }
+
       return NoContent();
     }
   }

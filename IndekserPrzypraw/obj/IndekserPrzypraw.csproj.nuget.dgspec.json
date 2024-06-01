@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/mrspaceman1/repos/IndekserPrzypraw/IndekserPrzypraw/IndekserPrzypraw.csproj": {}
+    "C:\\Users\\MrSpaceMan1\\RiderProjects\\IndekserPrzypraw\\IndekserPrzypraw\\IndekserPrzypraw.csproj": {}
   },
   "projects": {
-    "/home/mrspaceman1/repos/IndekserPrzypraw/IndekserPrzypraw/IndekserPrzypraw.csproj": {
+    "C:\\Users\\MrSpaceMan1\\RiderProjects\\IndekserPrzypraw\\IndekserPrzypraw\\IndekserPrzypraw.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/mrspaceman1/repos/IndekserPrzypraw/IndekserPrzypraw/IndekserPrzypraw.csproj",
+        "projectUniqueName": "C:\\Users\\MrSpaceMan1\\RiderProjects\\IndekserPrzypraw\\IndekserPrzypraw\\IndekserPrzypraw.csproj",
         "projectName": "IndekserPrzypraw",
-        "projectPath": "/home/mrspaceman1/repos/IndekserPrzypraw/IndekserPrzypraw/IndekserPrzypraw.csproj",
-        "packagesPath": "/home/mrspaceman1/.nuget/packages/",
-        "outputPath": "/home/mrspaceman1/repos/IndekserPrzypraw/IndekserPrzypraw/obj/",
+        "projectPath": "C:\\Users\\MrSpaceMan1\\RiderProjects\\IndekserPrzypraw\\IndekserPrzypraw\\IndekserPrzypraw.csproj",
+        "packagesPath": "C:\\Users\\MrSpaceMan1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\MrSpaceMan1\\RiderProjects\\IndekserPrzypraw\\IndekserPrzypraw\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/mrspaceman1/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\MrSpaceMan1\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -32,11 +32,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -107,20 +102,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.2, 8.0.2]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.linux-x64",
-              "version": "[8.0.2, 8.0.2]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.2, 8.0.2]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -129,7 +110,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.206/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

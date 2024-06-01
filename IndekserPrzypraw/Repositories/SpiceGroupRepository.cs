@@ -14,8 +14,7 @@ public interface ISpiceGroupRepository
   Task<SpiceGroup?> GetSpiceGroupByNameAsync(string spiceGroupName, int drawerId);
 
   Task<SpiceGroup?> GetSpiceGroupByNameAsync(string spiceGroupName);
-  Task<SpiceGroup> AddSpiceGroupAsync(string name, string barcode,
-    int grams, int drawerId, int? minimumCount, int? minimumGrams);
+  Task<SpiceGroup> AddSpiceGroupAsync(SpiceGroup spiceGroup);
 
   Task RemoveSpiceGroupAsync(int spiceGroupId);
   Task TransferSpiceGroupsAsync(int fromDrawerId, int toDrawerId);
@@ -73,22 +72,11 @@ public class SpiceGroupRepository : ISpiceGroupRepository
     return _context.SpiceGroups.AsNoTracking().FirstOrDefaultAsync(group => group.Name == spiceGroupName);
   }
 
-  public async Task<SpiceGroup> AddSpiceGroupAsync(string name, string barcode,
-    int grams, int drawerId, int? minimumCount, int? minimumGrams)
+  public async Task<SpiceGroup> AddSpiceGroupAsync(SpiceGroup spiceGroup)
   {
-    SpiceGroup newSpiceGroup = new SpiceGroup
-    {
-      Name = name,
-      Grams = grams,
-      MinimumCount = minimumCount,
-      MinimumGrams = minimumGrams,
-      Barcode = barcode,
-      DrawerId = drawerId
-    };
-
-    _context.SpiceGroups.Add(newSpiceGroup);
+    _context.SpiceGroups.Add(spiceGroup);
     await _context.SaveChangesAsync();
-    return newSpiceGroup;
+    return spiceGroup;
   }
 
   public async Task TransferSpiceGroupsAsync(int fromDrawerId, int toDrawerId)
