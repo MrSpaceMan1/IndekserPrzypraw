@@ -3,6 +3,7 @@ using AutoMapper;
 using IndekserPrzypraw.Models;
 using IndekserPrzypraw.Profiles;
 using IndekserPrzypraw.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace IndekserPrzyprawTests;
 
@@ -112,14 +113,17 @@ public class SpiceGroupRepositoryTest : IClassFixture<DatabaseFixture>
     var unitOfWork = new UnitOfWork<SpicesContext>(context);
     var spiceGroupRepository = new SpiceGroupRepository(unitOfWork);
 
-    var twoDrawers = context.Drawers.ToList().Take(2).ToList();
+    var twoDrawers = context.Drawers.Include(d => d.SpiceGroups).ToList().Take(2).ToList();
     var firstDrawer = twoDrawers[0];
     var secondDrawer = twoDrawers[1];
 
     await unitOfWork.BeginTransaction();
     await spiceGroupRepository.TransferSpiceGroupsAsync(firstDrawer.DrawerId, secondDrawer.DrawerId);
 
-    Assert.Empty(firstDrawer.SpiceGroups);
+    var foundFirst = context.Drawers.Include(d => d.SpiceGroups).First(d => d.DrawerId == firstDrawer.DrawerId);
+    var foundSecond = context.Drawers.Include(d => d.SpiceGroups).First(d => d.DrawerId == secondDrawer.DrawerId);
+    Assert.Empty(foundFirst.SpiceGroups);
+    Assert.Equal(8, foundSecond.SpiceGroups.Count);
     await unitOfWork.Rollback();
   }
 

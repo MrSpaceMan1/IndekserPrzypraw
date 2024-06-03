@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ButtonWrapper, SideMenu, SpiceList } from '@/components'
 import { StoreState } from '@/stores/store.ts'
 import hamburgerMenuSvg from '@/assets/hamburger_menu.svg'
-import gearSvg from '@/assets/gear.svg'
+// import gearSvg from '@/assets/gear.svg'
 import addNewSvg from '@/assets/add_new.svg'
 import funnelSvg from '@/assets/funnel.svg'
 import './MainPage.css'
@@ -94,16 +94,16 @@ export default function MainPage() {
             {drawer?.name ?? 'Drawer'}
           </h1>
         </ButtonWrapper>
-        <ButtonWrapper
-          onClick={() => {}}
-          additionalClasses={['header-item-height']}
-        >
-          <img
-            src={gearSvg}
-            className="header-icon black-icon-filter"
-            alt="Drawer settings icon"
-          />
-        </ButtonWrapper>
+        {/*<ButtonWrapper*/}
+        {/*  onClick={() => {}}*/}
+        {/*  additionalClasses={['header-item-height']}*/}
+        {/*>*/}
+        {/*  <img*/}
+        {/*    src={gearSvg}*/}
+        {/*    className="header-icon black-icon-filter"*/}
+        {/*    alt="Drawer settings icon"*/}
+        {/*  />*/}
+        {/*</ButtonWrapper>*/}
       </header>
       <div>
         <span className="filter-bar-row">

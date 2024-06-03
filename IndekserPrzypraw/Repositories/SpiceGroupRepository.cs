@@ -82,17 +82,16 @@ public class SpiceGroupRepository : ISpiceGroupRepository
   public async Task TransferSpiceGroupsAsync(int fromDrawerId, int toDrawerId)
   {
     var spiceGroups = await _context.SpiceGroups
-      .Where(spiceGroup => spiceGroup.SpiceGroupId == fromDrawerId)
+      .Where(spiceGroup => spiceGroup.DrawerId == fromDrawerId)
       .ToListAsync();
     if (spiceGroups.IsNullOrEmpty())
       throw new NotFoundException(opt =>
         opt.AddModelError(nameof(fromDrawerId), "Spice group with provided id doesn't exist"));
-
-    foreach (var group in spiceGroups)
+    _context.SpiceGroups.UpdateRange(spiceGroups.Select(group =>
     {
       group.DrawerId = toDrawerId;
-    }
-
+      return group;
+    }));
     await _context.SaveChangesAsync();
   }
 

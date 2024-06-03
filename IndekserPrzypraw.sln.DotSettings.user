@@ -1,20 +1,21 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer /&gt;</s:String>
-	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">/home/mrspaceman1/.cache/JetBrains/Rider2023.3/resharper-host/temp/Rider/vAny/CoverageData/_IndekserPrzypraw.734110461/Snapshot/snapshot.utdcvr</s:String>
-	
-	
-	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f03e85b7_002D5034_002D4f4c_002D95ac_002D016b09974c11/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="SpiceRepositoryTest #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=54235dfc_002D1220_002D466a_002D88da_002D58ed3198e147/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TransferSpiceGroupsAsync_CorrectlyTransferred #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.SpiceRepositoryTest&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.SpiceGroupRepositoryTest.GetSpiceGroupByName_InExactDrawer_ReturnsWithCorrectName&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.SpiceGroupRepositoryTest&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.DrawerRepositoryTest.RemoveDrawerAsync_CorrectlyRemoved&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.LocalSpiceServiceTest.GetAllSpicesAsync_ReturnsAllSpice&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.LocalSpiceServiceTest&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.DrawerRepositoryTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.SpiceGroupRepositoryTest.TransferSpiceGroupsAsync_CorrectlyTransferred&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6a7e3b14_002Dd338_002D4a6d_002D9fed_002De368fadba62c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TransferSpiceGroupsAsync_CorrectlyTransferred" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::5699EA5C-2EC6-4064-9EC8-BEE34E314334::net8.0::IndekserPrzyprawTests.SpiceGroupRepositoryTest.TransferSpiceGroupsAsync_CorrectlyTransferred&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	
+	
+	
+	
+	
+	
 	
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Dtos/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

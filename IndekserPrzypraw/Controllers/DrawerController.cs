@@ -1,10 +1,14 @@
 using AutoMapper;
+using Castle.Core.Logging;
 using IndekserPrzypraw.DTO;
 using IndekserPrzypraw.Exceptions;
 using IndekserPrzypraw.Models;
 using IndekserPrzypraw.Profiles;
 using IndekserPrzypraw.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
+using Microsoft.Extensions.Logging.Console;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace IndekserPrzypraw.Controllers;
@@ -24,7 +28,8 @@ public class DrawerController : ControllerBase
     _mapper = mapper;
     _unitOfWork = new UnitOfWork<SpicesContext>(context);
     _drawerRepository = new DrawerRepository(_unitOfWork);
-    _spiceGroupRepository = new SpiceGroupRepository(_unitOfWork);
+    _spiceGroupRepository =
+      new SpiceGroupRepository(_unitOfWork);
     _logger = logger;
   }
 
@@ -146,6 +151,11 @@ public class DrawerController : ControllerBase
     try
     {
       await _spiceGroupRepository.TransferSpiceGroupsAsync(from, to);
+      await _unitOfWork.Commit();
+      return NoContent();
+    }
+    catch (NotFoundException e)
+    {
       await _unitOfWork.Commit();
       return NoContent();
     }

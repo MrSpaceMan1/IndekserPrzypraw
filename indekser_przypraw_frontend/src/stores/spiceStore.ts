@@ -21,6 +21,12 @@ export const SpiceStore = createSlice({
     addDrawer: (state, action: PayloadAction<Drawer>) => {
       state.drawers.push(action.payload)
     },
+    removeDrawer: (state, action: PayloadAction<Drawer>) => {
+      state.drawers.splice(
+        state.drawers.findIndex((d) => d.drawerId == action.payload.drawerId),
+        1
+      )
+    },
     editDrawer: (
       state,
       action: PayloadAction<Partial<Drawer> & { drawerId: number }>
@@ -116,4 +122,5 @@ export const {
   removeSpiceGroupFromDrawer,
   updateSpiceGroupFromDrawer,
   setSelected,
+  removeDrawer,
 } = SpiceStore.actions

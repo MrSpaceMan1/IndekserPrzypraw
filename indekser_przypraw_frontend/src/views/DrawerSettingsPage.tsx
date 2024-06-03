@@ -7,7 +7,9 @@ import Drawer from '@/types/Drawer.ts'
 import FetchError from '@/components/FetchError.tsx'
 import {
   editDrawer,
+  removeDrawer,
   removeSpiceGroupFromDrawer,
+  setSelected,
   updateSpiceGroupFromDrawer,
 } from '@/stores/spiceStore.ts'
 import './DrawerSettingsPage.css'
@@ -25,6 +27,7 @@ export default function DrawerSettingsPage() {
   )
 
   const [nameErrors, setNameErrors] = useState<{ [key: string]: string[] }>()
+  const [deleteDrawerOpen, setDeleteDrawerOpen] = useState(false)
 
   const submitEditName = (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault()
@@ -104,6 +107,54 @@ export default function DrawerSettingsPage() {
 
           {nameErrors && <FetchError errors={nameErrors} />}
         </div>
+        <button onClick={() => setDeleteDrawerOpen(true)}>Delete drawer</button>
+        {deleteDrawerOpen && (
+          <div id="transer">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                const formData = new FormData(e.currentTarget)
+                const to = formData.get('trans')?.toString()
+                if (!drawerId || !to) return
+                spiceApi
+                  .url('Drawer/')
+                  .url(drawerId)
+                  .url('/')
+                  .url(to)
+                  .post()
+                  .res()
+                  .then(() =>
+                    spiceApi
+                      .url('Drawer/')
+                      .url(drawerId)
+                      .delete()
+                      .res()
+                      .then(() => {
+                        dispatch(
+                          setSelected(
+                            drawers.filter(
+                              (d) => d.drawerId != Number.parseInt(drawerId)
+                            )[0].drawerId
+                          )
+                        )
+                        dispatch(removeDrawer(drawer!))
+                        navigate(-1)
+                      })
+                  )
+              }}
+            >
+              <label>Chose drawer to transfer spices to</label>
+              <select name="trans">
+                {drawers
+                  .filter((d) => d.drawerId != Number.parseInt(drawerId!))
+                  .map((d) => (
+                    <option value={d.drawerId}>{d.name}</option>
+                  ))}
+              </select>
+              <button>Delete</button>
+            </form>
+          </div>
+        )}
         <div className="spice-settings">
           <h1 className="montserrat-bold">Spices</h1>
           {drawer &&
