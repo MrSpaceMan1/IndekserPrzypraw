@@ -82,6 +82,28 @@ export default function DrawerSettingsPage() {
           )
         })
     }
+  const deleteDrawer = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const to = formData.get('trans')?.toString()
+    if (!drawerId || !to) return
+    spiceApi
+      .url(`Drawer/${drawerId}/${to}`)
+      .post()
+      .json<Drawer>()
+      .then((updatedDrawer) => {
+        dispatch(editDrawer(updatedDrawer))
+        spiceApi
+          .url(`Drawer/${drawerId}`)
+          .delete()
+          .res()
+          .then(() => {
+            dispatch(removeDrawer(drawer!))
+            dispatch(setSelected(0))
+            navigate(-1)
+          })
+      })
+  }
   return (
     <div id="drawer-settings">
       <div className="header">
@@ -110,39 +132,7 @@ export default function DrawerSettingsPage() {
         <button onClick={() => setDeleteDrawerOpen(true)}>Delete drawer</button>
         {deleteDrawerOpen && (
           <div id="transer">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault()
-                const formData = new FormData(e.currentTarget)
-                const to = formData.get('trans')?.toString()
-                if (!drawerId || !to) return
-                spiceApi
-                  .url('Drawer/')
-                  .url(drawerId)
-                  .url('/')
-                  .url(to)
-                  .post()
-                  .res()
-                  .then(() =>
-                    spiceApi
-                      .url('Drawer/')
-                      .url(drawerId)
-                      .delete()
-                      .res()
-                      .then(() => {
-                        dispatch(
-                          setSelected(
-                            drawers.filter(
-                              (d) => d.drawerId != Number.parseInt(drawerId)
-                            )[0].drawerId
-                          )
-                        )
-                        dispatch(removeDrawer(drawer!))
-                        navigate(-1)
-                      })
-                  )
-              }}
-            >
+            <form onSubmit={deleteDrawer}>
               <label>Chose drawer to transfer spices to</label>
               <select name="trans">
                 {drawers

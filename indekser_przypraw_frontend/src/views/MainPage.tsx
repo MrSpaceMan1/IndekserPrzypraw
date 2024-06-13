@@ -123,7 +123,11 @@ export default function MainPage() {
               ? filteredList(drawer.spices, (item) => item.name, filterString)
               : drawer.spices) ?? []
           ).map((spiceGroup) => (
-            <SpiceList key={spiceGroup.spiceGroupId} spiceGroup={spiceGroup} />
+            <SpiceList
+              key={spiceGroup.spiceGroupId}
+              spiceGroup={spiceGroup}
+              drawer={drawer}
+            />
           ))}
       </div>
       <div id="action-bar">

@@ -139,7 +139,7 @@ public class DrawerController : ControllerBase
   [ProducesResponseType(StatusCodes.Status204NoContent)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   [ProducesResponseType(StatusCodes.Status404NotFound)]
-  public async Task<IActionResult> MoveDrawer(int from, int to)
+  public async Task<ActionResult<DrawerDTO>> MoveDrawer(int from, int to)
   {
     var fromDrawer = await _drawerRepository.GetDrawerByIdAsync(from);
     if (fromDrawer is null) return NotFound($"Drawer with id {from} not found");
@@ -151,13 +151,15 @@ public class DrawerController : ControllerBase
     try
     {
       await _spiceGroupRepository.TransferSpiceGroupsAsync(from, to);
+      var updatedDrawer = await _drawerRepository.GetDrawerByIdAsync(to);
       await _unitOfWork.Commit();
-      return NoContent();
+      return Ok(_mapper.Map<Drawer, DrawerDTO>(updatedDrawer));
     }
     catch (NotFoundException e)
     {
+      var updatedDrawer = await _drawerRepository.GetDrawerByIdAsync(to);
       await _unitOfWork.Commit();
-      return NoContent();
+      return Ok(_mapper.Map<Drawer, DrawerDTO>(updatedDrawer));
     }
     catch
     {

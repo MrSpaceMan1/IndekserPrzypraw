@@ -2,6 +2,7 @@ using IndekserPrzypraw.Exceptions;
 using IndekserPrzypraw.Models;
 using IndekserPrzypraw.Profiles;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.IdentityModel.Tokens;
 
 namespace IndekserPrzypraw.Repositories;
@@ -57,9 +58,9 @@ public class SpiceGroupRepository : ISpiceGroupRepository
       .FirstOrDefaultAsync();
   }
 
-  public async Task<SpiceGroup?> GetSpiceGroupByNameAsync(string spiceGroupName, int drawerId)
+  public Task<SpiceGroup?> GetSpiceGroupByNameAsync(string spiceGroupName, int drawerId)
   {
-    return await _context.SpiceGroups
+    return _context.SpiceGroups
       .AsNoTracking()
       .Where(group => group.Name == spiceGroupName)
       .Where(group => group.DrawerId == drawerId)
@@ -81,17 +82,39 @@ public class SpiceGroupRepository : ISpiceGroupRepository
 
   public async Task TransferSpiceGroupsAsync(int fromDrawerId, int toDrawerId)
   {
-    var spiceGroups = await _context.SpiceGroups
+    IEqualityComparer<SpiceGroup> comparer =
+      new ValueComparer<SpiceGroup>((group1, group2) => group1.Name == group2.Name, group => group.Name.GetHashCode());
+
+    var fromDrawerSpiceGroups = (await _context.SpiceGroups
+      .Include(g => g.Spices)
       .Where(spiceGroup => spiceGroup.DrawerId == fromDrawerId)
-      .ToListAsync();
-    if (spiceGroups.IsNullOrEmpty())
+      .ToListAsync());
+
+    if (fromDrawerSpiceGroups.IsNullOrEmpty())
       throw new NotFoundException(opt =>
         opt.AddModelError(nameof(fromDrawerId), "Spice group with provided id doesn't exist"));
-    _context.SpiceGroups.UpdateRange(spiceGroups.Select(group =>
+
+    var toDrawerSpiceGroups =
+      (await _context.SpiceGroups.Where(group => group.DrawerId == toDrawerId).ToListAsync()).ToHashSet(comparer);
+    foreach (var fromDrawerSpiceGroup in fromDrawerSpiceGroups)
     {
-      group.DrawerId = toDrawerId;
-      return group;
-    }));
+      SpiceGroup? foundSpiceGroup;
+      if (toDrawerSpiceGroups.TryGetValue(fromDrawerSpiceGroup, out foundSpiceGroup))
+      {
+        _context.Spices.UpdateRange(fromDrawerSpiceGroup.Spices.Select(group =>
+        {
+          group.SpiceGroupId = foundSpiceGroup.SpiceGroupId;
+          return group;
+        }));
+        _context.SpiceGroups.Remove(fromDrawerSpiceGroup);
+      }
+      else
+      {
+        fromDrawerSpiceGroup.DrawerId = toDrawerId;
+        _context.Update(fromDrawerSpiceGroup);
+      }
+    }
+
     await _context.SaveChangesAsync();
   }
 

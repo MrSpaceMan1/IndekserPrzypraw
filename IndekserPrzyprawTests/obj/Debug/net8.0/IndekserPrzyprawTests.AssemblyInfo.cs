@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IndekserPrzyprawTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bdbf8f28bc76104c64962478987e56a305b4b734")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+18097a3b3cc882de779e7ff292bab12bed562139")]
 [assembly: System.Reflection.AssemblyProductAttribute("IndekserPrzyprawTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IndekserPrzyprawTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,0 +1,29 @@
+name: indekserprzypraw
+
+services:
+  database:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=password
+  aspapp:
+    build: ./IndekserPrzypraw
+    expose:
+      - "8080"
+    depends_on:
+      - database
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=https://+:8080
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ~/.aspnet/https:/https:ro
+  reverse_proxy:
+    build: .
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - aspapp

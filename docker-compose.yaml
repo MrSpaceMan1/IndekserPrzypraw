@@ -3,31 +3,30 @@ name: indekserprzypraw
 services:
   database:
     image: postgres:latest
-    ports:
-      - 5432:5432
     environment:
       - POSTGRES_PASSWORD=password
-  aspapp:
+  backend:
+    # image: mrspaceman1/indekserprzypraw-backend:latest
     build: ./IndekserPrzypraw
-    ports:
-      - 8080:8080
-      - 443:443
+    # ports:
+    #   - 3001:80
     depends_on:
       - database
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      # - ASPNETCORE_URLS=https://+:443;http://+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Password=password
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     volumes:
       - ~/.aspnet/https:/https:ro
-  reactapp:
-    build: ./indekser_przypraw_frontend
+    command: command
+  reverse_proxy_frontend:
+    # image: mrspaceman1/indekserprzypraw-frontend:latest
+    build: ./
     ports:
-      - 5173:5173
+      - 80:80
+      - 443:443
+    # volumes:
+    #   - ./nginx_certs:/etc/nginx/certs/
     depends_on:
-      - aspapp
-    environment:
-      - VITE_API_HOST=localhost:8080
-    volumes:
-      - ./indekser_przypraw_frontend:/app
+      - backend

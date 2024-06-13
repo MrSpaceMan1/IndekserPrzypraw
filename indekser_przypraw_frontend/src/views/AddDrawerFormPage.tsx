@@ -1,17 +1,19 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { FormEvent, useState } from 'react'
 import spiceApi from '@/wretchConfig.ts'
 import { useNavigate } from 'react-router-dom'
-import { addDrawer } from '@/stores/spiceStore.ts'
+import { addDrawer, setSelected } from '@/stores/spiceStore.ts'
 import { ApiError, Drawer } from '@/types'
 import FetchError from '@/components/FetchError.tsx'
 import './AddStuffFormPage.css'
 import DropdownSvg from '@/assets/dropdown.svg'
 import { ButtonWrapper } from '@/components'
+import { StoreState } from '@/stores/store.ts'
 
 export default function AddDrawerFormPage() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const drawers = useSelector((state: StoreState) => state.spice.drawers)
   const [name, setName] = useState<string>('')
   const [errors, setErrors] = useState<{ [key: string]: string[] }>({})
   const [isFetchingData, setIsFetchingData] = useState<boolean>(false)
@@ -27,11 +29,12 @@ export default function AddDrawerFormPage() {
       .json<Drawer>()
       .then((drawer) => {
         dispatch(addDrawer(drawer))
+        dispatch(setSelected(drawers.length))
         navigate('/', { relative: 'route' })
       })
       .catch((err: Error) => JSON.parse(err.message))
       .then((err: ApiError) => {
-        setErrors(err.errors)
+        setErrors(err.errors ?? {})
       })
       .finally(() => setIsFetchingData(false))
   }

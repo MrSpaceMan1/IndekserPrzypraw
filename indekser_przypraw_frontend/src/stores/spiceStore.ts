@@ -22,6 +22,7 @@ export const SpiceStore = createSlice({
       state.drawers.push(action.payload)
     },
     removeDrawer: (state, action: PayloadAction<Drawer>) => {
+      console.log(action)
       state.drawers.splice(
         state.drawers.findIndex((d) => d.drawerId == action.payload.drawerId),
         1
@@ -55,7 +56,10 @@ export const SpiceStore = createSlice({
           minimumCount: null,
           minimumGrams: null,
         })
-      else state.drawers[drawerIndex].spices[spiceGroupIndex].spices
+      else
+        state.drawers[drawerIndex].spices[spiceGroupIndex].spices.push(
+          action.payload.spice
+        )
     },
     removeSpiceFromDrawer: (
       state,
@@ -64,14 +68,17 @@ export const SpiceStore = createSlice({
       const drawerIndex = state.drawers.findIndex(
         (d) => d.drawerId === action.payload.drawerId
       )
+      console.log('drawerIndex: ' + drawerIndex)
       const spiceGroupIndex = state.drawers[drawerIndex].spices.findIndex(
         (sg) => sg.name === action.payload.spice.name
       )
+      console.log('spiceGroupIndex: ' + drawerIndex)
       const spiceIndex = state.drawers[drawerIndex].spices[
         spiceGroupIndex
       ].spices.findIndex(
         (spice) => spice.spiceId === action.payload.spice.spiceId
       )
+      console.log('spiceIndex: ' + drawerIndex)
       state.drawers[drawerIndex].spices[spiceGroupIndex].spices.splice(
         spiceIndex,
         1

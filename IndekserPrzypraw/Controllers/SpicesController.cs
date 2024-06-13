@@ -113,6 +113,7 @@ namespace IndekserPrzypraw.Controllers
       }
       catch (NotFoundException e)
       {
+        await _unitOfWork.Rollback();
         return this.BadRequestDueTo(e);
       }
 

@@ -9,7 +9,10 @@ export const store = configureStore({
     debug: debugStore.reducer,
     barcode: barcodeScannerStore.reducer,
     spice: SpiceStore.reducer,
-    spiceMix: spiceMixStore.reducer
+    spiceMix: spiceMixStore.reducer,
   },
 })
+
 export type StoreState = ReturnType<typeof store.getState>
+
+store.subscribe(() => console.log(store.getState().spice))

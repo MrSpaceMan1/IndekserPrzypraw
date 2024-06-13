@@ -25,6 +25,7 @@ builder.Services.AddDbContext<IdentityContext>(
     options.UseNpgsql(
       builder.Configuration.GetConnectionString("IdentityContext")
     );
+    options.EnableSensitiveDataLogging();
   });
 builder.Services.AddDbContext<SpicesContext>(options =>
   options
@@ -32,8 +33,8 @@ builder.Services.AddDbContext<SpicesContext>(options =>
       builder.Configuration.GetConnectionString("SpicesContext")
     )
 );
+builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
-builder.Services.AddHttpsRedirection(opt => opt.HttpsPort = 443);
 
 var app = builder.Build();
 
@@ -60,9 +61,9 @@ app.UseCors(opt =>
     .WithHeaders("Content-Type", "User-agent")
     .WithMethods("DELETE", "POST", "GET", "PUT", "PATCH", "OPTIONS"));
 
-app.MapGet("/api", async context => await context.Response.WriteAsync("OK"));
+app.UseHealthChecks("/api/");
 app.MapGroup("/api").MapIdentityApi<IdentityUser>();
 app.MapControllers().RequireAuthorization();
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.Run();

@@ -1,7 +1,7 @@
 import { NestedList, NestedListItem } from '@/components'
-import { Spice, SpiceGroup } from '@/types'
+import { Drawer, Spice, SpiceGroup } from '@/types'
 
-export default function SpiceList({ spiceGroup }: SpiceListProps) {
+export default function SpiceList({ spiceGroup, drawer }: SpiceListProps) {
   const gramSum = spiceGroup.spices.reduce(
     (acc: number, curr: Spice) => acc + curr.grams,
     0
@@ -41,7 +41,12 @@ export default function SpiceList({ spiceGroup }: SpiceListProps) {
         </thead>
         <tbody>
           {spiceGroup.spices.map((spice, index) => (
-            <NestedListItem key={spice.spiceId} spice={spice} index={index} />
+            <NestedListItem
+              key={spice.spiceId}
+              spice={spice}
+              index={index}
+              drawer={drawer}
+            />
           ))}
         </tbody>
       </table>
@@ -51,4 +56,5 @@ export default function SpiceList({ spiceGroup }: SpiceListProps) {
 
 interface SpiceListProps {
   spiceGroup: SpiceGroup
+  drawer: Drawer
 }

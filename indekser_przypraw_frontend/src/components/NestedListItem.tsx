@@ -1,12 +1,16 @@
 import { useRef } from 'react'
 import { useDispatch } from 'react-redux'
-import { Spice } from '@/types'
+import { Drawer, Spice } from '@/types'
 import spiceApi from '@/wretchConfig.ts'
 import { removeSpiceFromDrawer } from '@/stores/spiceStore.ts'
 import crossSvg from '@/assets/cross.svg'
 import './NestedListItem.css'
 
-export default function NestedListItem({ spice, index }: NestedListItemProps) {
+export default function NestedListItem({
+  drawer,
+  spice,
+  index,
+}: NestedListItemProps) {
   const dispatch = useDispatch()
   const isDeleting = useRef(false)
 
@@ -16,12 +20,12 @@ export default function NestedListItem({ spice, index }: NestedListItemProps) {
     spiceApi
       .delete('Spices/' + spice.spiceId)
       .res()
-      .then(() =>
+      .then(() => {
         dispatch(
-          removeSpiceFromDrawer({ drawerId: spice.drawerId, spice: spice })
+          removeSpiceFromDrawer({ drawerId: drawer.drawerId, spice: spice })
         )
-      )
-      .catch((error) => alert(error))
+      })
+      .catch((error) => console.error(error))
   }
 
   return (
@@ -43,6 +47,7 @@ export default function NestedListItem({ spice, index }: NestedListItemProps) {
 }
 
 interface NestedListItemProps {
+  drawer: Drawer
   spice: Spice
   index: number
 }

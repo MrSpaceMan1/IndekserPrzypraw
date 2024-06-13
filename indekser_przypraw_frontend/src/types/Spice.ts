@@ -4,7 +4,6 @@ interface Spice {
   expirationDate: 'string'
   grams: number
   spiceGroupId: number
-  drawerId: number
 }
 
 export default Spice

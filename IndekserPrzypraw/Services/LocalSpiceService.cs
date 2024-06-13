@@ -78,7 +78,6 @@ public class LocalSpiceService : ISpiceService
     Spice spice = await _spiceRepository.AddSpiceAsync(new Spice
     {
       SpiceGroupId = spiceGroup.SpiceGroupId,
-      SpiceGroup = spiceGroup,
       ExpirationDate = addSpiceDto.ExpirationDate ?? null,
     });
     await _unitOfWork.Commit();
@@ -111,7 +110,7 @@ public class LocalSpiceService : ISpiceService
     await _unitOfWork.BeginTransaction();
     foreach (var spice in spiceGroup.Spices)
     {
-      await RemoveSpiceAsync(spice.SpiceId);
+      await _spiceRepository.DeleteSpiceAsync(spice);
     }
 
     await _spiceGroupRepository.RemoveSpiceGroupAsync(spiceGroupId);

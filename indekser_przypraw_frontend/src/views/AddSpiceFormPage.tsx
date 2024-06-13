@@ -16,13 +16,16 @@ export default function AddSpiceFormPage() {
   )
 
   const drawers = useSelector((state: StoreState) => state.spice.drawers)
+  const selectedDrawer = useSelector(
+    (state: StoreState) => state.spice.selectedDrawer
+  )
   const dispatch = useDispatch()
   const [name, setName] = useState<string>(barcodeInfo.name)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [barcode, _] = useState<string>(barcodeInfo.barcode)
   const [grams, setGrams] = useState<number>(barcodeInfo.grams)
   const [expirationDate, setExpirationDate] = useState<string>('')
-  const [drawer, setDrawer] = useState<number>(drawers?.[0]?.drawerId)
+  const [drawer, setDrawer] = useState<number>(drawers[selectedDrawer].drawerId)
   const [isFetchingData, setIsFetchingData] = useState<boolean>(false)
 
   async function handleSubmit(ev: FormEvent<HTMLFormElement>) {
@@ -43,10 +46,6 @@ export default function AddSpiceFormPage() {
       })
       .catch((err) => {
         console.log(err)
-        spiceApi
-          .get()
-          .res()
-          .then(() => navigate('/login'))
       })
       .finally(() => setIsFetchingData(false))
     console.log(dataJson, 'Spices/drawer/' + drawer)
